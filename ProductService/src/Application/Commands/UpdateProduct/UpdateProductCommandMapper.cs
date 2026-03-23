@@ -1,17 +1,17 @@
 ﻿using Domain;
 using Shared.Events;
 
-namespace Application.Commands.CreateProduct
+namespace Application.Commands.UpdateProduct
 {
-    internal class CreateProductCommandMapper
+    internal class UpdateProductCommandMapper
     {
-        public ProductCreatedEvent_Price Map(ProductPrice price) =>
+        public ProductUpdatedEvent_Price Map(ProductPrice price) =>
             new(
                 price.Value,
                 price.Currency.Value
             );
 
-        public ProductCreatedEvent Map(Product @event) =>
+        public ProductUpdatedEvent Map(Product @event) =>
             new(
                 @event.Id,
                 @event.CreatedAt,
