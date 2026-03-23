@@ -10,10 +10,10 @@
         public ProductDescription(string value)
         {
             if (string.IsNullOrEmpty(value))
-                throw new InvalidProductName("Product description cannot be empty.");
+                throw new InvalidProductTitle("Product description cannot be empty.");
 
             if (value.Length < _minLength || value.Length > _maxLength)
-                throw new InvalidProductName($"Product description must be between {_minLength} and {_maxLength} characters.");
+                throw new InvalidProductTitle($"Product description must be between {_minLength} and {_maxLength} characters.");
 
             Value = value;
         }

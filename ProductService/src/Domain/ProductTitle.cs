@@ -10,10 +10,10 @@
         public ProductTitle(string value)
         {
             if (string.IsNullOrEmpty(value))
-                throw new InvalidProductName("Product title cannot be empty.");
+                throw new InvalidProductTitle("Product title cannot be empty.");
             
             if (value.Length < _minLength || value.Length > _maxLength)
-                throw new InvalidProductName($"Product title must be between {_minLength} and {_maxLength} characters.");
+                throw new InvalidProductTitle($"Product title must be between {_minLength} and {_maxLength} characters.");
 
             Value = value;
         }
