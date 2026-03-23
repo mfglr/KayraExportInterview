@@ -15,5 +15,5 @@
         string Description,
         ProductUpdatedEvent_Price Price,
         bool IsActive
-    );
+    ) : IEvent;
 }

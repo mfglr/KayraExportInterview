@@ -11,7 +11,7 @@
             public static bool IsValid(string value) => value == TRY || value == USD || value == EUR;
         }
 
-        public string Value { get; }
+        public string Value { get; private set; }
 
         public Currency(string value)
         {

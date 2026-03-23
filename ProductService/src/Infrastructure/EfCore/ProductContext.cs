@@ -1,16 +1,21 @@
 ﻿using Domain;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System.Reflection;
 
 namespace Infrastructure.EfCore
 {
-    internal class ProductContext(DbContextOptions<ProductContext> options) : DbContext(options)
+    public class ProductContext(DbContextOptions<ProductContext> options) : DbContext(options)
     {
         public DbSet<Product> Products { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
@@ -20,7 +25,7 @@ namespace Infrastructure.EfCore
         public ProductContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<ProductContext>();
-            builder.UseSqlServer("Server=localhost;Database=ProductDB;User Id=sa;Password=123456789Abc*;Trusted_Connection=True;");
+            builder.UseSqlServer("Data Source=localhost;Database=ProductDB;User ID=sa;Password=123456789Abc*;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Command Timeout=30");
             return new(builder.Options);
         }
     }

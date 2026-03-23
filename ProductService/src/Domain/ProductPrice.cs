@@ -3,7 +3,10 @@
     public class ProductPrice
     {
         public decimal Value { get; private set; }
-        public Currency Currency { get; private set; }
+        public Currency Currency { get; private set; } = null!;
+
+        //for ef core
+        private ProductPrice() { }
 
         public ProductPrice(decimal value, Currency currency)
         {

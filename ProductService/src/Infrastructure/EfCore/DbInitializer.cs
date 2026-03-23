@@ -3,12 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.EfCore
 {
-    public static class DpInitializer
+    public static class DbInitializer
     {
         public static void Init(IServiceProvider serviceProvider)
         {
-            using var scope = serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ProductContext>();
+            var context = serviceProvider.GetRequiredService<ProductContext>();
             context.Database.Migrate();
         }
     }
