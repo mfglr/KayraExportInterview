@@ -16,6 +16,6 @@
             CreatedAt = DateTime.UtcNow;
         }
         protected void Update() => UpdatedAt = DateTime.UtcNow;
-        protected void Delete() => DeletedAt = DateTime.UtcNow;
+        public void Delete() => DeletedAt = DateTime.UtcNow;
     }
 }
