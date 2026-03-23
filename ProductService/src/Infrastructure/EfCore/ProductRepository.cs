@@ -25,7 +25,7 @@ namespace Infrastructure.EfCore
                         ) &&
                         ( cursor == null || x.Id < cursor )
                 )
-                .OrderByDescending(x => x.Id)
+                .OrderByDescending(x => x.CreatedAt)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
     }
