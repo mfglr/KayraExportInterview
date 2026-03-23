@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using System.Reflection;
 
 namespace Infrastructure.EfCore
@@ -12,6 +13,15 @@ namespace Infrastructure.EfCore
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+    }
 
+    internal class ProductContextFactory : IDesignTimeDbContextFactory<ProductContext>
+    {
+        public ProductContext CreateDbContext(string[] args)
+        {
+            var builder = new DbContextOptionsBuilder<ProductContext>();
+            builder.UseSqlServer("Server=localhost;Database=ProductDB;User Id=sa;Password=123456789Abc*;Trusted_Connection=True;");
+            return new(builder.Options);
+        }
     }
 }
