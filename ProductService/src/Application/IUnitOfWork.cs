@@ -1,6 +1,6 @@
 ﻿namespace Application
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork
     {
         Task CommitAsync(CancellationToken cancellationToken = default);
     }
