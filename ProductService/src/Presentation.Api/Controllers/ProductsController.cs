@@ -5,6 +5,7 @@ using Application.Queries.GetAllProducts;
 using Application.Queries.GetProductById;
 using Application.Queries.SearchProduct;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Api.Controllers
@@ -25,10 +26,12 @@ namespace Presentation.Api.Controllers
         public Task<List<ProductQueryResponse>> GetAll([FromQuery] GetAllProductsQueryRequest request, CancellationToken cancellationToken) =>
             mediator.Send(request, cancellationToken);
 
+        [Authorize("user")]
         [HttpPost]
         public Task<CreateProductCommandResponse> Create(CreateProductCommandRequest request, CancellationToken cancellationToken) =>
             mediator.Send(request, cancellationToken);
 
+        [Authorize("user")]
         [HttpPut]
         public Task Update(UpdateProductCommandRequest request, CancellationToken cancellationToken) =>
             mediator.Send(request, cancellationToken);
