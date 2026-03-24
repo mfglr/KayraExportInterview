@@ -1,5 +1,6 @@
 ﻿using AuthService.Application;
 using AuthService.Application.Commands.CreateUser;
+using AuthService.Application.Commands.DeleteUser;
 using AuthService.Application.Commands.Login;
 using AuthService.Application.Commands.LoginByRefreshToken;
 using MediatR;
@@ -22,5 +23,9 @@ namespace AuthService.Api.Controllers
         [HttpPost]
         public Task<TokenResponse> LoginByRefreshToken(LoginByRefreshTokenCommandRequest request, CancellationToken cancellationToken) =>
             sender.Send(request, cancellationToken);
+
+        [HttpDelete("{id:guid}")]
+        public Task Delete(Guid id,CancellationToken cancellationToken) =>
+            sender.Send(new DeleteUserCommandRequest(id), cancellationToken);
     }
 }
