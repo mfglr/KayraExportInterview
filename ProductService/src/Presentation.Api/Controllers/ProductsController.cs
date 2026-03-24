@@ -1,4 +1,5 @@
 ﻿using Application.Commands.CreateProduct;
+using Application.Commands.DeleteProduct;
 using Application.Commands.UpdateProduct;
 using Application.Queries;
 using Application.Queries.GetAllProducts;
@@ -35,5 +36,10 @@ namespace Presentation.Api.Controllers
         [HttpPut]
         public Task Update(UpdateProductCommandRequest request, CancellationToken cancellationToken) =>
             mediator.Send(request, cancellationToken);
+
+        [Authorize("user")]
+        [HttpDelete("{id:guid}")]
+        public Task Delete(Guid id, CancellationToken cancellationToken) =>
+            mediator.Send(new DeleteProductCommandRequest(id), cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Commands.CreateProduct;
+using Application.Commands.DeleteProduct;
 using Application.Commands.DeleteUserProducts;
 using Application.Commands.UpdateProduct;
 using Application.Queries;
@@ -16,6 +17,7 @@ namespace Application
                 .AddSingleton<CreateProductCommandMapper>()
                 .AddSingleton<UpdateProductCommandMapper>()
                 .AddSingleton<ProductQueryResponseMapper>()
+                .AddSingleton<DeleteProductCommandMapper>()
                 .AddSingleton<DeleteUserProductsCommandMapper>()
                 .AddMediatR(
                     cfg => {
