@@ -16,7 +16,6 @@ namespace Application.Commands.CreateProduct
                 @event.Id,
                 @event.CreatedAt,
                 @event.UpdatedAt,
-                @event.DeletedAt,
                 @event.CategoryId,
                 @event.Title.Value,
                 @event.Description.Value,

@@ -9,7 +9,6 @@
         Guid Id,
         DateTime CreatedAt,
         DateTime? UpdatedAt,
-        DateTime? DeletedAt,
         Guid CategoryId,
         string Title,
         string Description,
