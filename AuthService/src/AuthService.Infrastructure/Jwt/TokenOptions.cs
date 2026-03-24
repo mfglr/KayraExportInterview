@@ -1,12 +1,12 @@
 ﻿using AuthService.Application;
 
-namespace AuthService.Infrastructure
+namespace AuthService.Infrastructure.Jwt
 {
     internal record TokenOptions(
         string Audience,
         string Issuer,
-        int AccessTokenExpiration,
-        int RefreshTokenExpiration,
+        int AccessTokenValidtyPeriod,
+        int RefreshTokenValidtyPeriod,
         string SecurityKey
     ) : ITokenOptions;
 }

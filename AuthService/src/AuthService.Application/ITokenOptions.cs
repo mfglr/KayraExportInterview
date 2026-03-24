@@ -4,8 +4,8 @@
     {
         string Audience { get; }
         string Issuer { get; }
-        int AccessTokenExpiration { get; }
-        int RefreshTokenExpiration { get; }
+        int AccessTokenValidtyPeriod { get; }
+        int RefreshTokenValidtyPeriod { get; }
         string SecurityKey { get; }
     }
 }

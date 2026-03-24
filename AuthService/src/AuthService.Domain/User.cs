@@ -4,11 +4,23 @@ namespace AuthService.Domain
 {
     public class User : IdentityUser
     {
-
         public const int MaxSessionCount = 5;
 
+        public DateTime CreatedAt { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
         private readonly List<RefreshToken> _refreshTokens = [];
         public IReadOnlyList<RefreshToken> RefreshTokens => _refreshTokens;
+
+        internal User(Email email, TimeSpan refreshTokenValidtyPeriod) : base()
+        {
+            Email = email.Value;
+            UserName = email.GenerateUserName();
+            _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
+            CreatedAt = DateTime.UtcNow;
+        }
+
+        //for ef core
+        private User() { }
 
         private void CleanUpExpiredSessions() => _refreshTokens.RemoveAll(x => x.IsExpired());
 

@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace AuthService.Infrastructure
+namespace AuthService.Infrastructure.Jwt
 {
     internal class AccessTokenGenerator(ITokenOptions tokenOptions, UserManager<User> userManager) : IAccessTokenGenerator
     {
@@ -27,7 +27,7 @@ namespace AuthService.Infrastructure
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey));
             JwtSecurityToken jwtSecurityToken = new(
                 issuer: tokenOptions.Issuer,
-                expires: DateTime.Now.AddMinutes(tokenOptions.AccessTokenExpiration),
+                expires: DateTime.Now.AddMinutes(tokenOptions.AccessTokenValidtyPeriod),
                 notBefore: DateTime.Now,
                 claims: await GetClaims(user),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)

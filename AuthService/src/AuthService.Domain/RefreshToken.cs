@@ -9,6 +9,9 @@ namespace AuthService.Domain
         public byte[] TokenHash { get; private set; }
         public DateTime ExpiredAt { get; private set; }
 
+        //for ef core
+        private RefreshToken() { }
+
         public RefreshToken(TimeSpan timeSpan)
         {
             Token = Guid.NewGuid().ToString();
