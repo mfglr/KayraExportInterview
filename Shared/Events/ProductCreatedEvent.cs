@@ -14,5 +14,5 @@
         string Description,
         ProductCreatedEvent_Price Price,
         bool IsActive
-    ) : IEvent;
+    );
 }
