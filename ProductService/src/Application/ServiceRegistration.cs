@@ -1,6 +1,6 @@
 ﻿using Application.Commands.CreateProduct;
 using Application.Commands.UpdateProduct;
-using Application.Queries.SearchProduct;
+using Application.Queries;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,7 @@ namespace Application
             services
                 .AddSingleton<CreateProductCommandMapper>()
                 .AddSingleton<UpdateProductCommandMapper>()
-                .AddSingleton<SearchProductQueryMapper>()
+                .AddSingleton<ProductQueryResponseMapper>()
                 .AddMediatR(
                     cfg => {
                         cfg.LicenseKey = configuration.GetSection("LuckPenny:LicenseKey").Value;

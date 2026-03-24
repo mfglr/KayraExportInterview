@@ -1,17 +1,17 @@
-﻿namespace Application.Queries.SearchProduct
+﻿namespace Application.Queries
 {
-    public record SearchProductQueryResponse_Price(
+    public record ProductQueryResponse_Price(
         decimal Price,
         string Currency
     );
 
-    public record SearchProductQueryResponse(
+    public record ProductQueryResponse(
         Guid Id,
         DateTime CreatedAt,
         DateTime? UpdatedAt,
         Guid CategoryId,
         string Title,
         string Description,
-        SearchProductQueryResponse_Price Price
+        ProductQueryResponse_Price Price
     );
 }

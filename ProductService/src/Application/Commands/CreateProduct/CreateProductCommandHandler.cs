@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Queries;
+using Domain;
 using MassTransit;
 using MediatR;
 
@@ -7,7 +8,9 @@ namespace Application.Commands.CreateProduct
     internal class CreateProductCommandHandler(
         IProductRepository repository,
         IPublishEndpoint publishEndpoint,
-        CreateProductCommandMapper mapper
+        CreateProductCommandMapper mapper,
+        ProductQueryResponseMapper queryMapper,
+        IProductCacheService cacheService
     ) : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
     {
         public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
@@ -22,6 +25,8 @@ namespace Application.Commands.CreateProduct
 
             var @event = mapper.Map(product);
             await publishEndpoint.Publish(@event, cancellationToken);
+
+            await cacheService.CreateAsync(queryMapper.Map(product));
 
             return new(product.Id);
         }

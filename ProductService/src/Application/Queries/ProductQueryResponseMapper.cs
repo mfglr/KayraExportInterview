@@ -1,16 +1,16 @@
 ﻿using Domain;
 
-namespace Application.Queries.SearchProduct
+namespace Application.Queries
 {
-    internal class SearchProductQueryMapper
+    internal class ProductQueryResponseMapper
     {
-        public SearchProductQueryResponse_Price Map(ProductPrice price) =>
+        public ProductQueryResponse_Price Map(ProductPrice price) =>
             new(
                 price.Value,
                 price.Currency.Value
             );
 
-        public SearchProductQueryResponse Map(Product @event) =>
+        public ProductQueryResponse Map(Product @event) =>
             new(
                 @event.Id,
                 @event.CreatedAt,

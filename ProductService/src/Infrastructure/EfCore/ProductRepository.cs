@@ -28,5 +28,13 @@ namespace Infrastructure.EfCore
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
+
+        public Task<List<Product>> GetAllAsync(Guid? cursor, int pageSize, CancellationToken cancellationToken = default) =>
+            context.Products
+                .AsNoTracking()
+                .Where(x => cursor == null || x.Id < cursor)
+                .OrderByDescending(x => x.CreatedAt)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
     }
 }

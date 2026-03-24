@@ -6,5 +6,5 @@ namespace Application.Queries.SearchProduct
         string Key,
         Guid? Cursor,
         int PageSize
-    ) : IRequest<List<SearchProductQueryResponse>>;
+    ) : IRequest<List<ProductQueryResponse>>;
 }
