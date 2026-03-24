@@ -17,7 +17,7 @@ namespace Infrastructure.EfCore
         public Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
             context.Products.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        public Task<List<Product>> SearchAsync(string key, Guid? cursor, int pageSize, CancellationToken cancellationToken = default) =>
+        public Task<List<Product>> SearchAsync(string key, DateTime? cursor, int pageSize, CancellationToken cancellationToken = default) =>
             context.Products
                 .AsNoTracking()
                 .Where(
@@ -26,16 +26,16 @@ namespace Infrastructure.EfCore
                             x.Title.Value.ToLower().Contains(key.ToLower()) || 
                             x.Description.Value.ToLower().Contains(key.ToLower())
                         ) &&
-                        ( cursor == null || x.Id < cursor )
+                        ( cursor == null || x.CreatedAt < cursor )
                 )
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
-        public Task<List<Product>> GetAllAsync(Guid? cursor, int pageSize, CancellationToken cancellationToken = default) =>
+        public Task<List<Product>> GetAllAsync(DateTime? cursor, int pageSize, CancellationToken cancellationToken = default) =>
             context.Products
                 .AsNoTracking()
-                .Where(x => cursor == null || x.Id < cursor)
+                .Where(x => cursor == null || x.CreatedAt < cursor)
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);

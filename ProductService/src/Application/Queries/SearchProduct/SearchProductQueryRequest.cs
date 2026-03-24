@@ -4,7 +4,7 @@ namespace Application.Queries.SearchProduct
 {
     public record SearchProductQueryRequest(
         string Key,
-        Guid? Cursor,
+        DateTime? Cursor,
         int PageSize
     ) : IRequest<List<ProductQueryResponse>>;
 }

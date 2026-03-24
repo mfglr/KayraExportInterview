@@ -2,5 +2,5 @@
 
 namespace Application.Queries.GetAllProducts
 {
-    public record GetAllProductsQueryRequest(Guid? Cursor, int PageSize) : IRequest<List<ProductQueryResponse>>;
+    public record GetAllProductsQueryRequest(DateTime? Cursor, int PageSize) : IRequest<List<ProductQueryResponse>>;
 }
