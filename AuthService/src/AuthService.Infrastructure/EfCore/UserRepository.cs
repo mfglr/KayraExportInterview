@@ -9,6 +9,9 @@ namespace AuthService.Infrastructure.EfCore
             await userManager.FindByEmailAsync(key) ??
             await userManager.FindByNameAsync(key);
 
+        public Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+           userManager.FindByIdAsync(id.ToString());
+
         public Task CreateAsync(User user, Password pasword, CancellationToken cancellationToken = default) =>
             userManager.CreateAsync(user, pasword.Value);
 

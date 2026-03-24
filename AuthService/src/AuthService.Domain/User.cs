@@ -25,5 +25,14 @@ namespace AuthService.Domain
             _refreshTokens.Clear();
             _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
         }
+
+        public void LoginByRefreshToken(string token, TimeSpan refreshTokenValidtyPeriod)
+        {
+            if (!_refreshTokens.Any(x => x.IsValid(token)))
+                throw new InvalidOrExpiredRefreshToken();
+
+            _refreshTokens.Clear();
+            _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
+        }
     }
 }

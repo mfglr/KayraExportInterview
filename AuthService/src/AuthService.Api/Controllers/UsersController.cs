@@ -1,6 +1,7 @@
 ﻿using AuthService.Application;
 using AuthService.Application.Commands.CreateUser;
 using AuthService.Application.Commands.Login;
+using AuthService.Application.Commands.LoginByRefreshToken;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,10 @@ namespace AuthService.Api.Controllers
 
         [HttpPost]
         public Task<TokenResponse> Login(LoginCommandRequest request, CancellationToken cancellationToken) =>
+            sender.Send(request, cancellationToken);
+
+        [HttpPost]
+        public Task<TokenResponse> LoginByRefreshToken(LoginByRefreshTokenCommandRequest request, CancellationToken cancellationToken) =>
             sender.Send(request, cancellationToken);
     }
 }
