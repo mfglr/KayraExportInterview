@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace AuthService.Domain
 {
     public class RefreshToken
     {
-        public string Token { get; private set; }
+        public string Token { get; private set; } //not mapped
         public byte[] TokenHash { get; private set; }
         public DateTime ExpiredAt { get; private set; }
 
@@ -19,14 +17,19 @@ namespace AuthService.Domain
             
             ExpiredAt = DateTime.UtcNow.Add(timeSpan);
         }
+            
+        internal bool IsExpired() => ExpiredAt < DateTime.UtcNow;
 
-        public bool IsValid(string token)
+        internal bool IsMatching(string token)
         {
-            ArgumentNullException.ThrowIfNull(token,nameof(token));
+            ArgumentNullException.ThrowIfNull(token, nameof(token));
 
             var bytes = Encoding.UTF8.GetBytes(token);
             var hash = SHA256.HashData(bytes);
-            return hash.SequenceEqual(TokenHash) && DateTime.UtcNow < ExpiredAt;
+            return hash.SequenceEqual(TokenHash);
         }
+
+        public bool IsValid(string token) => IsMatching(token) && !IsExpired();
+
     }
 }
