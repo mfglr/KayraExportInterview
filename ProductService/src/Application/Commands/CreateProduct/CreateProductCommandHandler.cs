@@ -10,16 +10,18 @@ namespace Application.Commands.CreateProduct
         IPublishEndpoint publishEndpoint,
         CreateProductCommandMapper mapper,
         ProductQueryResponseMapper queryMapper,
-        IProductCacheService cacheService
+        IProductCacheService cacheService,
+        IAuthService authService
     ) : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
     {
         public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
         {
+            var userId = authService.UserId;
             var title = new ProductTitle(request.Title);
             var description = new ProductDescription(request.Description);
             var currency = new Currency(request.Currency);
             var price = new ProductPrice(request.Price, currency);
-            var product = new Product(request.CategoryId, title, description, price);
+            var product = new Product(userId, request.CategoryId, title, description, price);
 
             await repository.CreateAsync(product, cancellationToken);
 

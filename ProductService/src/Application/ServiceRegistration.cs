@@ -1,4 +1,5 @@
 ﻿using Application.Commands.CreateProduct;
+using Application.Commands.DeleteUserProducts;
 using Application.Commands.UpdateProduct;
 using Application.Queries;
 using MediatR;
@@ -15,6 +16,7 @@ namespace Application
                 .AddSingleton<CreateProductCommandMapper>()
                 .AddSingleton<UpdateProductCommandMapper>()
                 .AddSingleton<ProductQueryResponseMapper>()
+                .AddSingleton<DeleteUserProductsCommandMapper>()
                 .AddMediatR(
                     cfg => {
                         cfg.LicenseKey = configuration.GetSection("LuckPenny:LicenseKey").Value;

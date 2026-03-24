@@ -11,6 +11,9 @@ namespace Infrastructure.EfCore
         public void Delete(Product product) =>
             context.Products.Remove(product);
 
+        public void Delete(IEnumerable<Product> products) =>
+            context.Products.RemoveRange(products);
+
         public Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
             context.Products.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -36,5 +39,8 @@ namespace Infrastructure.EfCore
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
+
+        public Task<List<Product>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default) =>
+            context.Products.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
     }
 }

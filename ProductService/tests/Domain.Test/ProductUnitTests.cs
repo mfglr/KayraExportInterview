@@ -2,15 +2,16 @@
 {
     public class ProductUnitTests
     {
+        private readonly Guid _userId = Guid.NewGuid();
         private readonly Guid _categoryId = Guid.NewGuid();
         private readonly ProductTitle _title = new ("Valid Title");
         private readonly ProductDescription _description = new("Valid Description");
-        private readonly ProductPrice _price = new ProductPrice(10.5m, Currency.USD.Clone());
+        private readonly ProductPrice _price = new (10.5m, Currency.USD.Clone());
         private readonly Product _product;
-
+        
         public ProductUnitTests()
         {
-            _product = new(_categoryId, _title, _description, _price);
+            _product = new(_userId, _categoryId, _title, _description, _price);
         }
 
         [Fact]
@@ -24,22 +25,22 @@
         [Fact]
         public void Product_ShouldProductThrowException_WhenCategoryIdIsEmpty()
         {
-            Assert.Throws<ArgumentException>(() => new Product(default, _title, _description, _price));
+            Assert.Throws<ArgumentException>(() => new Product(_userId, default, _title, _description, _price));
         }
         [Fact]
         public void Product_ShouldProductThrowException_WhenTitleIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new Product(_categoryId, null!, _description, _price));
+            Assert.Throws<ArgumentNullException>(() => new Product(_userId, _categoryId, null!, _description, _price));
         }
         [Fact]
         public void Product_ShouldProductThrowException_WhenDescriptionIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new Product(_categoryId, _title, null!, _price));
+            Assert.Throws<ArgumentNullException>(() => new Product(_userId, _categoryId, _title, null!, _price));
         }
         [Fact]
         public void Product_ShouldProductThrowException_WhenPriceIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new Product(_categoryId, _title, _description, null!));
+            Assert.Throws<ArgumentNullException>(() => new Product(_userId, _categoryId, _title, _description, null!));
         }
 
         [Fact]

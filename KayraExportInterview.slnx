@@ -15,6 +15,7 @@
     <Project Path="ProductService/src/Domain/Domain.csproj" Id="735c7f46-8068-4b75-93ef-4e4aca156c17" />
     <Project Path="ProductService/src/Infrastructure/Infrastructure.csproj" Id="f764e46b-8074-4408-8e5a-8d5f013dad5b" />
     <Project Path="ProductService/src/Presentation.Api/Presentation.Api.csproj" Id="81c91285-54c6-416b-af38-4fb9f6d372aa" />
+    <Project Path="ProductService/src/Product.Worker/Product.Worker.csproj" Id="b5656b4f-75c7-4d89-ad08-e0f55466f2cd" />
   </Folder>
   <Folder Name="/ProductService/tests/">
     <Project Path="ProductService/tests/Domain.Test/Domain.Test.csproj" Id="cff6d654-6374-4b84-9f99-bdbd57d88446" />
