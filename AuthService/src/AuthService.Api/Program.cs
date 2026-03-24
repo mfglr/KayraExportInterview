@@ -1,3 +1,4 @@
+using AuthService.Api.Auth;
 using AuthService.Api.MassTransit;
 using AuthService.Application;
 using AuthService.Domain;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services
+    .AddAuthenticationAndAuthorization(builder.Configuration)
     .AddMassTransit(builder.Configuration)
     .AddDomain()
     .AddApplication(builder.Configuration)
@@ -21,6 +23,7 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Init(scope.ServiceProvider);
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

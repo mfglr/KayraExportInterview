@@ -7,13 +7,14 @@ namespace AuthService.Application.Commands.DeleteUser
     internal class DeleteUserCommandHandler(
         IUserRepository userRepository,
         IPublishEndpoint publishEndpoint,
-        DeleteUserCommandMapper mapper
+        DeleteUserCommandMapper mapper,
+        IAuthService authService
     ) : IRequestHandler<DeleteUserCommandRequest>
     {
         public async Task Handle(DeleteUserCommandRequest request, CancellationToken cancellationToken)
         {
             var user = 
-                await userRepository.GetByIdAsync(request.Id, cancellationToken) ??
+                await userRepository.GetByIdAsync(authService.UserId, cancellationToken) ??
                 throw new UserNotFound();
 
             await userRepository.DeleteAsync(user, cancellationToken);

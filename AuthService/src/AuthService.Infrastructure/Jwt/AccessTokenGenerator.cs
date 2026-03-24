@@ -16,7 +16,7 @@ namespace AuthService.Infrastructure.Jwt
 
             return [
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new(JwtRegisteredClaimNames.Aud, tokenOptions.Audience),
+                ..tokenOptions.Audience.Select(aud => new Claim(JwtRegisteredClaimNames.Aud, aud)),
                 new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 .. roles.Select(role => new Claim(ClaimTypes.Role, role))
             ];

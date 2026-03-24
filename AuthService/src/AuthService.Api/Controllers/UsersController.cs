@@ -4,6 +4,7 @@ using AuthService.Application.Commands.DeleteUser;
 using AuthService.Application.Commands.Login;
 using AuthService.Application.Commands.LoginByRefreshToken;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Api.Controllers
@@ -24,8 +25,9 @@ namespace AuthService.Api.Controllers
         public Task<TokenResponse> LoginByRefreshToken(LoginByRefreshTokenCommandRequest request, CancellationToken cancellationToken) =>
             sender.Send(request, cancellationToken);
 
-        [HttpDelete("{id:guid}")]
-        public Task Delete(Guid id,CancellationToken cancellationToken) =>
-            sender.Send(new DeleteUserCommandRequest(id), cancellationToken);
+        [Authorize("user")]
+        [HttpDelete]
+        public Task Delete(CancellationToken cancellationToken) =>
+            sender.Send(new DeleteUserCommandRequest(), cancellationToken);
     }
 }

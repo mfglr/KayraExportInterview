@@ -2,5 +2,5 @@
 
 namespace AuthService.Application.Commands.DeleteUser
 {
-    public record DeleteUserCommandRequest(Guid Id) : IRequest;
+    public record DeleteUserCommandRequest : IRequest;
 }

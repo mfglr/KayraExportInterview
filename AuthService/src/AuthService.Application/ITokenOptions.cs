@@ -2,7 +2,7 @@
 {
     public interface ITokenOptions
     {
-        string Audience { get; }
+        List<string> Audience { get; }
         string Issuer { get; }
         int AccessTokenValidtyPeriod { get; }
         int RefreshTokenValidtyPeriod { get; }

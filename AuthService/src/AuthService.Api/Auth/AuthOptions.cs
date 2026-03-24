@@ -1,0 +1,8 @@
+﻿namespace AuthService.Api.Auth
+{
+    internal record AuthOptions(
+        string Issuer,
+        string Audience,
+        string SecurityKey
+    );
+}
