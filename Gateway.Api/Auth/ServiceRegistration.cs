@@ -50,6 +50,7 @@ namespace Gateway.Api.Auth
                                 {
                                     p.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                                     p.RequireAuthenticatedUser();
+                                    p.RequireRole("user");
                                 }
                             );
                     }

@@ -51,6 +51,7 @@ namespace AuthService.Api.Auth
                                 {
                                     p.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                                     p.RequireAuthenticatedUser();
+                                    p.RequireRole("user");
                                 }
                             );
                     }
