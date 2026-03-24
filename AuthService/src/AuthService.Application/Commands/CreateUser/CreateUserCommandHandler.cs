@@ -21,6 +21,7 @@ namespace AuthService.Application.Commands.CreateUser
             var user = await userCreator.CreateAsync(email, refreshTokenValidtyPeriod, cancellationToken);
 
             await userRepository.CreateAsync(user, password, cancellationToken);
+            await userRepository.AddRoleAsync(user, "user", cancellationToken);
 
             var @event = mapper.Map(user);
             await publishEndpoint.Publish(@event, cancellationToken);

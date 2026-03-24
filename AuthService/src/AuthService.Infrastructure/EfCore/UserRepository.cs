@@ -23,5 +23,8 @@ namespace AuthService.Infrastructure.EfCore
 
         public Task<bool> CheckPasswordAsync(User user, string password, CancellationToken cancellationToken = default) =>
             userManager.CheckPasswordAsync(user, password);
+
+        public Task AddRoleAsync(User user, string role, CancellationToken cancellationToken = default) =>
+            userManager.AddToRoleAsync(user, role);
     }
 }
