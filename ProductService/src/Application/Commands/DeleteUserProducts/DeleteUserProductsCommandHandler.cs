@@ -7,7 +7,8 @@ namespace Application.Commands.DeleteUserProducts
     internal class DeleteUserProductsCommandHandler(
         IProductRepository productRepository,
         DeleteUserProductsCommandMapper mapper,
-        IPublishEndpoint publishEndpoint
+        IPublishEndpoint publishEndpoint,
+        IProductCacheService cacheService
     ) : IRequestHandler<DeleteUserProductsCommandRequest>
     {
         public async Task Handle(DeleteUserProductsCommandRequest request, CancellationToken cancellationToken)
@@ -17,6 +18,8 @@ namespace Application.Commands.DeleteUserProducts
 
             var events = products.Select(mapper.Map);
             await publishEndpoint.PublishBatch(events, cancellationToken);
+
+            await cacheService.DeleteAsync(products.Select(x => x.Id));
         }
     }
 }

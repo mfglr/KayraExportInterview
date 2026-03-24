@@ -29,7 +29,7 @@ namespace Application.Commands.UpdateProduct
             var @event = mapper.Map(product);
             await publishEndpoint.Publish(@event, cancellationToken);
 
-            await cacheService.CreateAsync(queryMapper.Map(product));
+            await cacheService.UpsertAsync(queryMapper.Map(product));
         }
     }
 }

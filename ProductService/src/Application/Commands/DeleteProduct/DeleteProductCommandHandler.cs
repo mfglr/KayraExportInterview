@@ -7,7 +7,8 @@ namespace Application.Commands.DeleteProduct
     internal class DeleteProductCommandHandler(
         DeleteProductCommandMapper mapper,
         IProductRepository productRepository,
-        IPublishEndpoint publishEndpoint
+        IPublishEndpoint publishEndpoint,
+        IProductCacheService cacheService
     ) : IRequestHandler<DeleteProductCommandRequest>
     {
         public async Task Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
@@ -20,6 +21,8 @@ namespace Application.Commands.DeleteProduct
 
             var @event = mapper.Map(product);
             await publishEndpoint.Publish(@event, cancellationToken);
+
+            await cacheService.DeleteAsync(product.Id);
         }
     }
 }

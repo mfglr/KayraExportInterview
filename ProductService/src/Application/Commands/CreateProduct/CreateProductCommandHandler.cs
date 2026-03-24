@@ -28,7 +28,7 @@ namespace Application.Commands.CreateProduct
             var @event = mapper.Map(product);
             await publishEndpoint.Publish(@event, cancellationToken);
 
-            await cacheService.CreateAsync(queryMapper.Map(product));
+            await cacheService.UpsertAsync(queryMapper.Map(product));
 
             return new(product.Id);
         }

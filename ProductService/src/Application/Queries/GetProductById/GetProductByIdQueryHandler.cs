@@ -19,7 +19,7 @@ namespace Application.Queries.GetProductById
                 throw new ProductNotFoundException();
 
             dto = mapper.Map(product);
-            await cacheService.CreateAsync(dto);
+            await cacheService.UpsertAsync(dto);
             
             return dto;
         }
