@@ -4,6 +4,7 @@ namespace AuthService.Domain
 {
     public class User : IdentityUser
     {
+
         public const int MaxSessionCount = 5;
 
         private readonly List<RefreshToken> _refreshTokens = [];
