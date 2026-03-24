@@ -20,7 +20,6 @@
             Assert.Equal(_product.Title, _title);
             Assert.Equal(_product.Description, _description);
             Assert.Equal(_product.Price, _price);
-            Assert.True(_product.IsActive);
         }
         [Fact]
         public void Product_ShouldProductThrowException_WhenCategoryIdIsEmpty()
@@ -74,42 +73,6 @@
         public void Update_ShouldProductThrowException_WhenPriceIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _product.Update(_title, _description, null!));
-        }
-
-        [Fact]
-        public void Activate_ShouldTrue_WhenProductIsInactive()
-        {
-            _product.Deactivate();
-            var dateTimeBeforeUpdate = DateTime.UtcNow;
-            _product.Activate();
-
-            Assert.True(_product.IsActive);
-            Assert.NotNull(_product.UpdatedAt);
-            Assert.True(_product.UpdatedAt >= dateTimeBeforeUpdate);
-            Assert.True(_product.UpdatedAt <= DateTime.UtcNow);
-        }
-        [Fact]
-        public void Activate_ShouldThrowExeption_WhenProductIsActive()
-        {
-            Assert.Throws<InvalidProductState>(() => _product.Activate());
-        }
-
-        [Fact]
-        public void Deactivate_ShouldTrue_WhenProductIsActive()
-        {
-            var dateTimeBeforeUpdate = DateTime.UtcNow;
-            _product.Deactivate();
-
-            Assert.False(_product.IsActive);
-            Assert.NotNull(_product.UpdatedAt);
-            Assert.True(_product.UpdatedAt >= dateTimeBeforeUpdate);
-            Assert.True(_product.UpdatedAt <= DateTime.UtcNow);
-        }
-        [Fact]
-        public void Deactivate_ShouldThrowExeption_WhenProductIsActive()
-        {
-            _product.Deactivate();
-            Assert.Throws<InvalidProductState>(() => _product.Deactivate());
         }
     }
 }

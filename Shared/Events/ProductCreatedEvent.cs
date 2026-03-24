@@ -12,7 +12,6 @@
         Guid CategoryId,
         string Title,
         string Description,
-        ProductCreatedEvent_Price Price,
-        bool IsActive
+        ProductCreatedEvent_Price Price
     );
 }

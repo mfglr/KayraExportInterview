@@ -19,8 +19,7 @@ namespace Application.Commands.CreateProduct
                 @event.CategoryId,
                 @event.Title.Value,
                 @event.Description.Value,
-                Map(@event.Price),
-                @event.IsActive
+                Map(@event.Price)
             );
     }
 }
