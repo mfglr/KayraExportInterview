@@ -1,4 +1,11 @@
 <Solution>
+  <Folder Name="/AuthService/" />
+  <Folder Name="/AuthService/src/">
+    <Project Path="AuthService/src/AuthService.Domain/AuthService.Domain.csproj" />
+  </Folder>
+  <Folder Name="/AuthService/tests/">
+    <Project Path="AuthService/tests/AuthService.Domain.Test/AuthService.Domain.Test.csproj" Id="0206c2f5-c342-4e0e-8626-da1f16615055" />
+  </Folder>
   <Folder Name="/ProductService/" />
   <Folder Name="/ProductService/src/">
     <Project Path="ProductService/src/Application/Application.csproj" Id="e35c1a58-f32f-4aff-a026-06b98372cdb8" />
