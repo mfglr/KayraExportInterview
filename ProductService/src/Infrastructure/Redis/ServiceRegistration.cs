@@ -16,7 +16,6 @@ namespace Infrastructure.Redis
                     return multiplexer.GetDatabase();
                 })
                 .AddScoped<IProductCacheService, RedisProductCacheService>()
-                .AddScoped<IProductSerchCacheService, RedisProductSearchCacheService>()
                 .AddScoped<IProductListCacheService, RedisProductListCacheService>();
     }
 }
