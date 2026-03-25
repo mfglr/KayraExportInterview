@@ -9,6 +9,10 @@
   <Folder Name="/AuthService/tests/">
     <Project Path="AuthService/tests/AuthService.Domain.Test/AuthService.Domain.Test.csproj" Id="0206c2f5-c342-4e0e-8626-da1f16615055" />
   </Folder>
+  <Folder Name="/LogService/">
+    <Project Path="LogService.Application/LogService.Application.csproj" Id="b8aecba8-0cdf-46c6-9290-e06025a31a28" />
+    <Project Path="LogService/LogService.Domain/LogService.Domain.csproj" Id="a083fe25-7358-4182-835b-b73f6bea912f" />
+  </Folder>
   <Folder Name="/ProductService/" />
   <Folder Name="/ProductService/src/">
     <Project Path="ProductService/src/ProductService.Api/ProductService.Api.csproj" Id="982a2a14-a6fa-4b52-97b9-b0be5f3420fd" />
