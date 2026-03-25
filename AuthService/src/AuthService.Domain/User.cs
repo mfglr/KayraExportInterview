@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AuthService.Domain.Exceptions;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Domain
 {
@@ -29,7 +30,7 @@ namespace AuthService.Domain
         public void LoginByRefreshToken(string token, TimeSpan refreshTokenValidtyPeriod)
         {
             if (!_refreshTokens.Any(x => x.IsValid(token)))
-                throw new InvalidOrExpiredRefreshToken();
+                throw new InvalidOrExpiredRefreshTokenException();
 
             _refreshTokens.Clear();
             _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));

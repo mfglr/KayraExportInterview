@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using AuthService.Domain.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace AuthService.Domain
 {
@@ -12,7 +13,7 @@ namespace AuthService.Domain
         public Email(string value)
         {
             if (value == null || !_regex.IsMatch(value))
-                throw new InvalidEmail();
+                throw new InvalidEmailException();
             Value = value;
         }
 

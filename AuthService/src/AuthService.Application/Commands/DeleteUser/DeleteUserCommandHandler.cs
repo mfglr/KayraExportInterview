@@ -15,7 +15,7 @@ namespace AuthService.Application.Commands.DeleteUser
         {
             var user = 
                 await userRepository.GetByIdAsync(authService.UserId, cancellationToken) ??
-                throw new UserNotFound();
+                throw new UserNotFoundException();
 
             await userRepository.DeleteAsync(user, cancellationToken);
 

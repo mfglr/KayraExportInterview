@@ -13,10 +13,10 @@ namespace AuthService.Application.Commands.Login
         {
             var user = 
                 await userRepository.GetEmailOrUserNameAsync(request.Key, cancellationToken) ??
-                throw new UserNotFound();
+                throw new UserNotFoundException();
 
             if (!await userRepository.CheckPasswordAsync(user, request.Password, cancellationToken))
-                throw new InvalidCredentials();
+                throw new InvalidCredentialsException();
 
             var refreshTokenValidtyPeriod = TimeSpan.FromDays(tokenOptions.RefreshTokenValidtyPeriod);
             user.Login(refreshTokenValidtyPeriod);

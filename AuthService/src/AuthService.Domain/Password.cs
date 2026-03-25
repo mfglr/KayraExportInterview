@@ -1,4 +1,6 @@
-﻿namespace AuthService.Domain
+﻿using AuthService.Domain.Exceptions;
+
+namespace AuthService.Domain
 {
     public class Password
     {
@@ -10,7 +12,7 @@
         public Password(string value)
         {
             if (string.IsNullOrWhiteSpace(value) || value.Length < _minLength || value.Length > _maxLength)
-                throw new InvalidPassword($"Password must be between {_minLength} and {_maxLength} characters.");
+                throw new InvalidPasswordException($"Password must be between {_minLength} and {_maxLength} characters.");
             Value = value;
         }
 

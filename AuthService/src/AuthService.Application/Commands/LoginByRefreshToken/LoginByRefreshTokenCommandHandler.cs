@@ -13,7 +13,7 @@ namespace AuthService.Application.Commands.LoginByRefreshToken
         {
             var user =
                 await userRepository.GetByIdAsync(request.Id, cancellationToken) ??
-                throw new UserNotFound();
+                throw new UserNotFoundException();
 
             var refreshTokenValidtyPeriod = TimeSpan.FromDays(tokenOptions.RefreshTokenValidtyPeriod);
             user.LoginByRefreshToken(request.Token, refreshTokenValidtyPeriod);
