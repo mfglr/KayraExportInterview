@@ -1,9 +1,9 @@
-using Application;
 using Infrastructure;
 using Infrastructure.EfCore;
 using Presentation.Api.Auth;
 using Presentation.Api.MassTransit;
 using Presentation.Api.Middlewares;
+using ProductService.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 

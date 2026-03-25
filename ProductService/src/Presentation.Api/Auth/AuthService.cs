@@ -1,4 +1,4 @@
-﻿using Application;
+﻿using ProductService.Application;
 using System.Security.Claims;
 
 namespace Presentation.Api.Auth

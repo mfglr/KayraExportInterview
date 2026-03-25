@@ -1,8 +1,8 @@
-﻿using Application;
-using ProductService.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductService.Application;
+using ProductService.Domain;
 
 namespace Infrastructure.EfCore
 {

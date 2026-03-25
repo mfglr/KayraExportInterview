@@ -1,6 +1,6 @@
-﻿using Application;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductService.Application;
 using StackExchange.Redis;
 
 namespace Infrastructure.Redis
@@ -15,7 +15,6 @@ namespace Infrastructure.Redis
                     var multiplexer = sp.GetRequiredService<ConnectionMultiplexer>();
                     return multiplexer.GetDatabase();
                 })
-                .AddScoped<IProductCacheService, RedisProductCacheService>()
                 .AddScoped<IProductCacheService, RedisProductCacheService>();
     }
 }

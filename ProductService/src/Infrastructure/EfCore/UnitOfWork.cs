@@ -1,4 +1,4 @@
-﻿using Application;
+﻿using ProductService.Application;
 
 namespace Infrastructure.EfCore
 {

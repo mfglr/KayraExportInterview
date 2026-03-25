@@ -1,5 +1,5 @@
-﻿using Application;
-using Application.Queries;
+﻿using ProductService.Application;
+using ProductService.Application.Queries;
 using StackExchange.Redis;
 using System.Text.Json;
 

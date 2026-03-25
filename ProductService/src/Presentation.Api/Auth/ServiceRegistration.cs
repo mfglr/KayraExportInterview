@@ -1,6 +1,6 @@
-﻿using Application;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using ProductService.Application;
 using System.Text;
 
 namespace Presentation.Api.Auth

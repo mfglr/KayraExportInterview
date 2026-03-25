@@ -1,13 +1,13 @@
-﻿using Application.Commands.CreateProduct;
-using Application.Commands.DeleteProduct;
-using Application.Commands.UpdateProduct;
-using Application.Queries;
-using Application.Queries.GetAllProducts;
-using Application.Queries.GetProductById;
-using Application.Queries.SearchProduct;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProductService.Application.Commands.CreateProduct;
+using ProductService.Application.Commands.DeleteProduct;
+using ProductService.Application.Commands.UpdateProduct;
+using ProductService.Application.Queries;
+using ProductService.Application.Queries.GetAllProducts;
+using ProductService.Application.Queries.GetProductById;
+using ProductService.Application.Queries.SearchProduct;
 
 namespace Presentation.Api.Controllers
 {
