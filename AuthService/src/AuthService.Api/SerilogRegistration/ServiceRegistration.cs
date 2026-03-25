@@ -1,6 +1,4 @@
-﻿using AuthService.Api;
-using Serilog;
-using Serilog.Formatting.Json;
+﻿using Serilog;
 
 namespace AuthService.Api.SerilogRegistration
 {
@@ -17,11 +15,10 @@ namespace AuthService.Api.SerilogRegistration
                     password: options.Password,
                     hostnames: [options.Host],
                     vHost: options.VirtualHost,
-                    
-                    exchange: "LogExchange",
+                    exchange: options.LogExchangeName,
                     deliveryMode: Serilog.Sinks.RabbitMQ.RabbitMQDeliveryMode.Durable,
                     autoCreateExchange: true,
-                    formatter: new JsonFormatter()
+                    formatter: new CustomFormatter("AuthService.Api")
                 )
                 .CreateLogger();
 

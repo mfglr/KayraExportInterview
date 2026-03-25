@@ -4,6 +4,7 @@
         string Host,
         string VirtualHost,
         string Password,
-        string UserName
+        string UserName,
+        string LogExchangeName
     );
 }

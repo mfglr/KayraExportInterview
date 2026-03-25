@@ -12,7 +12,7 @@ namespace AuthService.Application.Commands.Login
     {
         public async Task<TokenResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
         {
-            var user = 
+            var user =
                 await userRepository.GetEmailOrUserNameAsync(request.Key, cancellationToken) ??
                 throw new UserNotFoundException();
 

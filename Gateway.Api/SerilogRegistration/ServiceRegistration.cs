@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using Serilog.Formatting.Json;
 
 namespace Gateway.Api.SerilogRegistration
 {
@@ -16,11 +15,10 @@ namespace Gateway.Api.SerilogRegistration
                     password: options.Password,
                     hostnames: [options.Host],
                     vHost: options.VirtualHost,
-                    
-                    exchange: "LogExchange",
+                    exchange: options.LogExchangeName,
                     deliveryMode: Serilog.Sinks.RabbitMQ.RabbitMQDeliveryMode.Durable,
                     autoCreateExchange: true,
-                    formatter: new JsonFormatter()
+                    formatter: new CustomFormatter("Gateway.Api")
                 )
                 .CreateLogger();
 
