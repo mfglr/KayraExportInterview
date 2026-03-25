@@ -11,6 +11,7 @@ namespace Presentation.Api.Middlewares
             {
                 ValidationException => 400,
                 NotFoundException => 404,
+                ForbiddenException => 403,
                 _ => 500,
             };
 

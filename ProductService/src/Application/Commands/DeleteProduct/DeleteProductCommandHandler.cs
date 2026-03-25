@@ -9,7 +9,8 @@ namespace Application.Commands.DeleteProduct
         DeleteProductCommandMapper mapper,
         IProductRepository productRepository,
         IPublishEndpoint publishEndpoint,
-        IProductCacheService cacheService
+        IProductCacheService cacheService,
+        IAuthService authService
     ) : IRequestHandler<DeleteProductCommandRequest>
     {
         public async Task Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
@@ -17,6 +18,9 @@ namespace Application.Commands.DeleteProduct
             var product = 
                 await productRepository.GetByIdAsync(request.Id, cancellationToken) ??
                 throw new ProductNotFoundException();
+
+            if (product.UserId != authService.UserId)
+                throw new InsufficientPermissionToDeleteProductException();
 
             productRepository.Delete(product);
 
