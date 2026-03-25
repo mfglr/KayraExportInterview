@@ -1,4 +1,6 @@
-﻿namespace Domain.Test
+﻿using Domain.Exceptions;
+
+namespace Domain.Test
 {
     public class ProductDescriptionUnitTets
     {
@@ -24,7 +26,7 @@
         [InlineData("")]
         public void ProductDescription_ShouldThrowException_WhenValueIsEmptyOrNull(string? value)
         {
-            Assert.Throws<InvalidProductDescription>(() => new ProductDescription(value));
+            Assert.Throws<InvalidDescriptionException>(() => new ProductDescription(value));
         }
         [Theory]
         [InlineData("a")]
@@ -38,13 +40,13 @@
         [InlineData("aaaaaaaaa")]
         public void ProductDescription_ShouldThrowException_WhenInvalid(string value)
         {
-            Assert.Throws<InvalidProductDescription>(() => new ProductDescription(value));
+            Assert.Throws<InvalidDescriptionException>(() => new ProductDescription(value));
         }
         [Fact]
         public void ProductDescription_ShouldThrowException_WhenValueIsGreaterThanMaxLength()
         {
             var value = new string('a', 2001);
-            Assert.Throws<InvalidProductDescription>(() => new ProductDescription(value));
+            Assert.Throws<InvalidDescriptionException>(() => new ProductDescription(value));
         }
     }
 }

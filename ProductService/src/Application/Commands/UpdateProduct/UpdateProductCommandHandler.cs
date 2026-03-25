@@ -1,4 +1,5 @@
-﻿using Application.Queries;
+﻿using Application.Exceptions;
+using Application.Queries;
 using Domain;
 using MassTransit;
 using MediatR;

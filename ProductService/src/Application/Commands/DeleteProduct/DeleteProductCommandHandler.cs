@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Exceptions;
+using Domain;
 using MassTransit;
 using MediatR;
 

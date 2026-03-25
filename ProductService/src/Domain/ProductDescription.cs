@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using Domain.Exceptions;
+
+namespace Domain
 {
     public class ProductDescription
     {
@@ -10,10 +12,10 @@
         public ProductDescription(string value)
         {
             if (string.IsNullOrEmpty(value))
-                throw new InvalidProductDescription("Product description cannot be empty.");
+                throw new InvalidDescriptionException("Product description cannot be empty.");
 
             if (value.Length < _minLength || value.Length > _maxLength)
-                throw new InvalidProductDescription($"Product description must be between {_minLength} and {_maxLength} characters.");
+                throw new InvalidDescriptionException($"Product description must be between {_minLength} and {_maxLength} characters.");
 
             Value = value;
         }

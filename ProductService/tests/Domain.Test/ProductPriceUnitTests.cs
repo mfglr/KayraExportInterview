@@ -1,4 +1,6 @@
-﻿namespace Domain.Test
+﻿using Domain.Exceptions;
+
+namespace Domain.Test
 {
     public class ProductPriceUnitTests
     {
@@ -23,7 +25,7 @@
         public void ProductPrice_ShouldThrowInvalidPrice_WhenValueIsZeroOrNegative(decimal value)
         {
             var currency = new Currency("USD");
-            Assert.Throws<InvalidPrice>(() => new ProductPrice(value, currency));
+            Assert.Throws<InvalidPriceException>(() => new ProductPrice(value, currency));
         }
         [Fact]
         public void ProductPrice_ShouldThrowException_WhenCurrencyIsNull()

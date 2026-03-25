@@ -1,4 +1,6 @@
-﻿namespace Domain.Test
+﻿using Domain.Exceptions;
+
+namespace Domain.Test
 {
     public class ProductTitleUnitTests
     {
@@ -24,20 +26,20 @@
         [InlineData("")]
         public void ProductTitle_ShouldThrowException_WhenValueIsEmptyOrNull(string? value)
         {
-            Assert.Throws<InvalidProductTitle>(() => new ProductTitle(value));
+            Assert.Throws<InvalidTitleException>(() => new ProductTitle(value));
         }
         [Theory]
         [InlineData("a")]
         [InlineData("aa")]
         public void ProductTitle_ShouldThrowException_WhenInvalid(string value)
         {
-            Assert.Throws<InvalidProductTitle>(() => new ProductTitle(value));
+            Assert.Throws<InvalidTitleException>(() => new ProductTitle(value));
         }
         [Fact]
         public void ProductTitle_ShouldThrowException_WhenValueIsGreaterThanMaxLength()
         {
             var value = new string('a', 257);
-            Assert.Throws<InvalidProductTitle>(() => new ProductTitle(value));
+            Assert.Throws<InvalidTitleException>(() => new ProductTitle(value));
         }
     }
 }

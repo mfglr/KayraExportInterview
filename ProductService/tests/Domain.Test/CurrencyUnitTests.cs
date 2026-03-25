@@ -1,4 +1,6 @@
-﻿namespace Domain.Test
+﻿using Domain.Exceptions;
+
+namespace Domain.Test
 {
     public class CurrencyUnitTests
     {
@@ -29,7 +31,7 @@
         [InlineData(null)]
         public void Currency_ShouldThrowException_WhenValueIsInvalid(string? value)
         {
-            Assert.Throws<InvalidCurrency>(() => new Currency(value!));
+            Assert.Throws<InvalidCurrencyException>(() => new Currency(value!));
         }
 
         [Theory]

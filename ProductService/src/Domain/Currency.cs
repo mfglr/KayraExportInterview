@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using Domain.Exceptions;
+
+namespace Domain
 {
     public class Currency
     {
@@ -16,7 +18,7 @@
         public Currency(string value)
         {
             if (!CurrencyValues.IsValid(value))
-                throw new InvalidCurrency();
+                throw new InvalidCurrencyException();
 
             Value = value;
         }

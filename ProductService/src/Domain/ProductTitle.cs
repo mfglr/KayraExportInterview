@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using Domain.Exceptions;
+
+namespace Domain
 {
     public class ProductTitle
     {
@@ -10,10 +12,10 @@
         public ProductTitle(string value)
         {
             if (string.IsNullOrEmpty(value))
-                throw new InvalidProductTitle("Product title cannot be empty.");
+                throw new InvalidTitleException("Product title cannot be empty.");
             
             if (value.Length < _minLength || value.Length > _maxLength)
-                throw new InvalidProductTitle($"Product title must be between {_minLength} and {_maxLength} characters.");
+                throw new InvalidTitleException($"Product title must be between {_minLength} and {_maxLength} characters.");
 
             Value = value;
         }

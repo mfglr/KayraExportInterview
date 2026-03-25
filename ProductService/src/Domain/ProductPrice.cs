@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using Domain.Exceptions;
+
+namespace Domain
 {
     public class ProductPrice
     {
@@ -13,7 +15,7 @@
             ArgumentNullException.ThrowIfNull(currency,nameof(currency));
 
             if (value <= 0)
-                throw new InvalidPrice();
+                throw new InvalidPriceException();
 
             Value = value;
             Currency = currency;
