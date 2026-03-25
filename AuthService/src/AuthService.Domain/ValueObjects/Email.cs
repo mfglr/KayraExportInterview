@@ -1,7 +1,7 @@
 ﻿using AuthService.Domain.Exceptions;
 using System.Text.RegularExpressions;
 
-namespace AuthService.Domain
+namespace AuthService.Domain.ValueObjects
 {
     public class Email
     {

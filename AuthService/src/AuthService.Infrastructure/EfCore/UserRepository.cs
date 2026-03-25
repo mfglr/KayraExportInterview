@@ -1,4 +1,6 @@
-﻿using AuthService.Domain;
+﻿using AuthService.Domain.Entities;
+using AuthService.Domain.Repositories;
+using AuthService.Domain.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Infrastructure.EfCore

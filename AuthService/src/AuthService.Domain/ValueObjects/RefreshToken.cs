@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace AuthService.Domain
+namespace AuthService.Domain.ValueObjects
 {
     public class RefreshToken
     {

@@ -1,4 +1,6 @@
-﻿namespace AuthService.Domain.Test
+﻿using AuthService.Domain.ValueObjects;
+
+namespace AuthService.Domain.Test
 {
     public class RefreshTokenUnitTests
     {

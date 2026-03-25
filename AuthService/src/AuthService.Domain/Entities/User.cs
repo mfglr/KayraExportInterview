@@ -1,7 +1,8 @@
 ﻿using AuthService.Domain.Exceptions;
+using AuthService.Domain.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 
-namespace AuthService.Domain
+namespace AuthService.Domain.Entities
 {
     public class User : IdentityUser
     {

@@ -1,4 +1,4 @@
-﻿using AuthService.Domain;
+﻿using AuthService.Domain.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

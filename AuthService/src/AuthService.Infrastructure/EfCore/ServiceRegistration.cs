@@ -1,5 +1,6 @@
 ﻿using AuthService.Application;
-using AuthService.Domain;
+using AuthService.Domain.Entities;
+using AuthService.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AuthService.Domain.DomainServices;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AuthService.Domain
 {

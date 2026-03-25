@@ -1,5 +1,5 @@
 ﻿using AuthService.Application.Exceptions;
-using AuthService.Domain;
+using AuthService.Domain.Repositories;
 using MediatR;
 
 namespace AuthService.Application.Commands.Login

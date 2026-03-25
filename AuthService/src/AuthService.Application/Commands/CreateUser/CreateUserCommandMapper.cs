@@ -1,4 +1,4 @@
-﻿using AuthService.Domain;
+﻿using AuthService.Domain.Entities;
 using Shared.Events;
 
 namespace AuthService.Application.Commands.CreateUser

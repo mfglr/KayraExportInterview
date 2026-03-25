@@ -1,4 +1,7 @@
-﻿namespace AuthService.Domain
+﻿using AuthService.Domain.Entities;
+using AuthService.Domain.ValueObjects;
+
+namespace AuthService.Domain.Repositories
 {
     public interface IUserRepository
     {

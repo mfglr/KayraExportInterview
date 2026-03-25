@@ -1,6 +1,9 @@
-﻿using AuthService.Domain.Exceptions;
+﻿using AuthService.Domain.Entities;
+using AuthService.Domain.Exceptions;
+using AuthService.Domain.Repositories;
+using AuthService.Domain.ValueObjects;
 
-namespace AuthService.Domain
+namespace AuthService.Domain.DomainServices
 {
     public class UserCreatorDomainService(IUserRepository userRepository)
     {

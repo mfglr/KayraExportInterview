@@ -1,6 +1,6 @@
 ﻿using AuthService.Domain.Exceptions;
 
-namespace AuthService.Domain
+namespace AuthService.Domain.ValueObjects
 {
     public class Password
     {

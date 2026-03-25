@@ -1,4 +1,6 @@
-﻿using AuthService.Domain;
+﻿using AuthService.Domain.DomainServices;
+using AuthService.Domain.Repositories;
+using AuthService.Domain.ValueObjects;
 using MassTransit;
 using MediatR;
 
