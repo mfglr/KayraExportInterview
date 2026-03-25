@@ -1,4 +1,6 @@
-﻿namespace AuthService.Application.Exceptions
+﻿using Shared.Exceptions;
+
+namespace AuthService.Application.Exceptions
 {
-    internal class UserNotFoundException() : Exception("User not found");
+    internal class UserNotFoundException() : NotFoundException("User not found!");
 }

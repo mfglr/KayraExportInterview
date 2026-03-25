@@ -1,4 +1,6 @@
-﻿namespace AuthService.Domain.Exceptions
+﻿using Shared.Exceptions;
+
+namespace AuthService.Domain.Exceptions
 {
-    public class InvalidOrExpiredRefreshTokenException() : Exception("The refresh token is invalid or expired");
+    public class InvalidOrExpiredRefreshTokenException() : ValidationException("The refresh token is invalid or expired");
 }

@@ -1,4 +1,6 @@
-﻿namespace AuthService.Application.Exceptions
+﻿using Shared.Exceptions;
+
+namespace AuthService.Application.Exceptions
 {
-    internal class InvalidCredentialsException() : Exception("Invalid credentials.");
+    internal class InvalidCredentialsException() : ValidationException("Invalid credentials.");
 }

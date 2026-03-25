@@ -1,4 +1,6 @@
-﻿namespace AuthService.Domain.Exceptions
+﻿using Shared.Exceptions;
+
+namespace AuthService.Domain.Exceptions
 {
-    internal class EmailAlreadyTakenException() : Exception("Email has been already taken!");
+    internal class EmailAlreadyTakenException() : ValidationException("Email has been already taken!");
 }

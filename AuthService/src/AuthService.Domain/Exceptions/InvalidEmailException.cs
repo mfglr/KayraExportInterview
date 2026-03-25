@@ -1,4 +1,6 @@
-﻿namespace AuthService.Domain.Exceptions
+﻿using Shared.Exceptions;
+
+namespace AuthService.Domain.Exceptions
 {
-    internal class InvalidEmailException() : Exception("Email is not valid!");
+    internal class InvalidEmailException() : ValidationException("Email is not valid!");
 }
