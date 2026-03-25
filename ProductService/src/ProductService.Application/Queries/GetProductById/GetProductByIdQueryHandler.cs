@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ProductService.Application.Exceptions;
-using ProductService.Domain;
+using ProductService.Domain.Repositories;
 
 namespace ProductService.Application.Queries.GetProductById
 {

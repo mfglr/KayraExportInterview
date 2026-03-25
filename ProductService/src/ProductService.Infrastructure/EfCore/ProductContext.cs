@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using ProductService.Domain;
+using ProductService.Domain.Entities;
 using System.Reflection;
 
 namespace ProductService.Infrastructure.EfCore

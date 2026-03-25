@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ProductService.Domain;
+using ProductService.Domain.Repositories;
 
 namespace ProductService.Application.Queries.SearchProduct
 {

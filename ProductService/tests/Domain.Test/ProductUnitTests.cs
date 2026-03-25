@@ -1,4 +1,5 @@
-﻿using ProductService.Domain;
+﻿using ProductService.Domain.Entities;
+using ProductService.Domain.ValueObjects;
 
 namespace Domain.Test
 {

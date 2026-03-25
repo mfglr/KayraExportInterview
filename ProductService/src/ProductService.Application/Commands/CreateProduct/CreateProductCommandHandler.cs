@@ -1,7 +1,9 @@
 ﻿using MassTransit;
 using MediatR;
 using ProductService.Application.Queries;
-using ProductService.Domain;
+using ProductService.Domain.Entities;
+using ProductService.Domain.Repositories;
+using ProductService.Domain.ValueObjects;
 
 namespace ProductService.Application.Commands.CreateProduct
 {

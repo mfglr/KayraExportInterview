@@ -1,6 +1,6 @@
 ﻿using ProductService.Domain.Exceptions;
 
-namespace ProductService.Domain
+namespace ProductService.Domain.ValueObjects
 {
     public class ProductPrice
     {

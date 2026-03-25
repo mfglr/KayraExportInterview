@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductService.Domain;
+using ProductService.Domain.Entities;
+using ProductService.Domain.Repositories;
 
 namespace ProductService.Infrastructure.EfCore
 {

@@ -1,5 +1,5 @@
-﻿using ProductService.Domain;
-using ProductService.Domain.Exceptions;
+﻿using ProductService.Domain.Exceptions;
+using ProductService.Domain.ValueObjects;
 
 namespace Domain.Test
 {

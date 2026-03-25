@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductService.Application;
-using ProductService.Domain;
+using ProductService.Domain.Repositories;
 
 namespace ProductService.Infrastructure.EfCore
 {

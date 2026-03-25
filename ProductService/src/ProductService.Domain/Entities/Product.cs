@@ -1,6 +1,7 @@
-﻿using Shared;
+﻿using ProductService.Domain.ValueObjects;
+using Shared;
 
-namespace ProductService.Domain
+namespace ProductService.Domain.Entities
 {
     public class Product : Entity
     {
