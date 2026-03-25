@@ -1,9 +1,9 @@
 ﻿using MassTransit;
-using Presentation.Api.MassTransit;
-using Presentation.Api.MassTransit.Consumers.DeleteUserProducts_OnUserDeleted;
+using ProductService.Api.MassTransit;
+using ProductService.Api.MassTransit.Consumers.DeleteUserProducts_OnUserDeleted;
 using ProductService.Infrastructure.EfCore;
 
-namespace Presentation.Api.MassTransit
+namespace ProductService.Api.MassTransit
 {
     internal static class ServiceRegistration
     {

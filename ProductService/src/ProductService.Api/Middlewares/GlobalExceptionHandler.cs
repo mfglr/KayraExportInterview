@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Shared.Exceptions;
 
-namespace Presentation.Api.Middlewares
+namespace ProductService.Api.Middlewares
 {
     internal class GlobalExceptionHandler : IExceptionHandler
     {

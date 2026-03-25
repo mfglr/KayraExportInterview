@@ -3,7 +3,7 @@ using MediatR;
 using ProductService.Application.Commands.DeleteUserProducts;
 using Shared.Events;
 
-namespace Presentation.Api.MassTransit.Consumers.DeleteUserProducts_OnUserDeleted
+namespace ProductService.Api.MassTransit.Consumers.DeleteUserProducts_OnUserDeleted
 {
     internal class DeleteUserProducts_OnUserDeleted_ProductService(IMediator mediator) : IConsumer<UserDeletedEvent>
     {

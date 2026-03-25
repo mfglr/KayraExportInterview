@@ -1,7 +1,7 @@
 ﻿using ProductService.Application;
 using System.Security.Claims;
 
-namespace Presentation.Api.Auth
+namespace ProductService.Api.Auth
 {
     public class AuthService(IHttpContextAccessor httpContextAccessor) : IAuthService
     {

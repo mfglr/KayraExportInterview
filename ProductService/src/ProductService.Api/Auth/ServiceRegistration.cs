@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProductService.Application;
 using System.Text;
 
-namespace Presentation.Api.Auth
+namespace ProductService.Api.Auth
 {
     internal static class ServiceRegistration
     {

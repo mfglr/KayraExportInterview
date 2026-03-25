@@ -9,7 +9,7 @@ using ProductService.Application.Queries.GetAllProducts;
 using ProductService.Application.Queries.GetProductById;
 using ProductService.Application.Queries.SearchProduct;
 
-namespace Presentation.Api.Controllers
+namespace ProductService.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

@@ -1,4 +1,4 @@
-﻿namespace Presentation.Api.Auth
+﻿namespace ProductService.Api.Auth
 {
     internal class AuthenticationException : Exception;
 }

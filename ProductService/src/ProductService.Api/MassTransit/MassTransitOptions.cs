@@ -1,4 +1,4 @@
-﻿namespace Presentation.Api.MassTransit
+﻿namespace ProductService.Api.MassTransit
 {
     internal record MassTransitOptions(
         string Host,
