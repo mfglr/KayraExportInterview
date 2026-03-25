@@ -1,4 +1,5 @@
-﻿using AuthService.Domain;
+﻿using AuthService.Application.Exceptions;
+using AuthService.Domain;
 using MassTransit;
 using MediatR;
 
