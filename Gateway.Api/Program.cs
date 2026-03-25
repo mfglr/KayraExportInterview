@@ -1,6 +1,9 @@
 using Gateway.Api.Auth;
+using Gateway.Api.SerilogRegistration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddCustomSerilog();
 
 builder.Services
     .AddAuthenticationAndAuthorization(builder.Configuration)

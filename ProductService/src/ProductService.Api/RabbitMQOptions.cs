@@ -1,6 +1,6 @@
-﻿namespace ProductService.Api.MassTransit
+﻿namespace ProductService.Api
 {
-    internal record MassTransitOptions(
+    internal record RabbitMQOptions(
         string Host,
         string VirtualHost,
         string Password,

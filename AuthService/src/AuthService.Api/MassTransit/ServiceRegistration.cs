@@ -8,7 +8,7 @@ namespace AuthService.Api.MassTransit
     {
         public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration)
         {
-            var option = configuration.GetSection(nameof(MassTransitOptions)).Get<MassTransitOptions>()!;
+            var option = configuration.GetSection(nameof(RabbitMQOptions)).Get<RabbitMQOptions>()!;
             return services
                 .AddMassTransit(
                     brc =>

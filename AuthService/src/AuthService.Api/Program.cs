@@ -1,18 +1,18 @@
 using AuthService.Api.Auth;
 using AuthService.Api.MassTransit;
 using AuthService.Api.Middlewares;
+using AuthService.Api.SerilogRegistration;
 using AuthService.Application;
 using AuthService.Domain;
 using AuthService.Infrastructure;
 using AuthService.Infrastructure.EfCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddCustomSerilog();
 
 builder.Services.AddControllers();
-
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-
 builder.Services
+    .AddExceptionHandler<GlobalExceptionHandler>()
     .AddAuthenticationAndAuthorization(builder.Configuration)
     .AddMassTransit(builder.Configuration)
     .AddDomain()
