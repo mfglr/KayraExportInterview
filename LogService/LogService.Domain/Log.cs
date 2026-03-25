@@ -2,6 +2,7 @@
 {
     public class Log(string serviceName, DateTime timeStamp, string level, string messageTemplate, string? traceId, string? controller, string? action, Exception? exception)
     {
+        public Guid Id = Guid.CreateVersion7();
         public string ServiceName { get; private set; } = serviceName;
         public DateTime TimeStamp { get; private set; } = timeStamp;
         public string Level { get; private set; } = level;

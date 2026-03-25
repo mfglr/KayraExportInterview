@@ -1,0 +1,17 @@
+﻿using LogService.Domain;
+using MediatR;
+
+namespace LogService.Application.Queries.GetLogsByTraceId
+{
+    internal class GetLogsByTraceIdQueryHandler(
+        ILogRepository logRepository,
+        LogResponseMapper mapper
+    ) : IRequestHandler<GetLogsByTraceIdQueryRequest, List<LogResponse>>
+    {
+        public async Task<List<LogResponse>> Handle(GetLogsByTraceIdQueryRequest request, CancellationToken cancellationToken)
+        {
+            var logs = await logRepository.GetByTraceId(request.TraceId, request.Cursor, request.PageSize, cancellationToken);
+            return [.. logs.Select(mapper.Map)];
+        }
+    }
+}
