@@ -1,6 +1,6 @@
-﻿using Domain.Exceptions;
+﻿using ProductService.Domain.Exceptions;
 
-namespace Domain
+namespace ProductService.Domain
 {
     public class ProductPrice
     {
@@ -24,14 +24,14 @@ namespace Domain
         public static bool operator==(ProductPrice left, ProductPrice right)
         {
             if (left.Currency != right.Currency)
-                throw new CurrencyMismatch();
+                throw new CurrencyMismatchException();
             return left.Value == right.Value;
         }
              
         public static bool operator !=(ProductPrice left, ProductPrice right)
         {
             if (left.Currency != right.Currency)
-                throw new CurrencyMismatch();
+                throw new CurrencyMismatchException();
             return left.Value != right.Value;
         }
 

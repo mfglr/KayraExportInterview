@@ -1,5 +1,5 @@
 ﻿using Application.Queries;
-using Domain;
+using ProductService.Domain;
 using MassTransit;
 using MediatR;
 

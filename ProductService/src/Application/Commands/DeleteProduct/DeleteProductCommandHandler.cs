@@ -1,7 +1,7 @@
 ﻿using Application.Exceptions;
-using Domain;
 using MassTransit;
 using MediatR;
+using ProductService.Domain;
 
 namespace Application.Commands.DeleteProduct
 {

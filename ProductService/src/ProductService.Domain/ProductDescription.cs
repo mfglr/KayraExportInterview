@@ -1,6 +1,6 @@
-﻿using Domain.Exceptions;
+﻿using ProductService.Domain.Exceptions;
 
-namespace Domain
+namespace ProductService.Domain
 {
     public class ProductDescription
     {

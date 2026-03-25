@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using ProductService.Domain;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;

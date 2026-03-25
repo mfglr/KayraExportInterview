@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using ProductService.Domain;
+using ProductService.Domain.Exceptions;
 
 namespace Domain.Test
 {
@@ -62,8 +63,8 @@ namespace Domain.Test
             var p1 = new ProductPrice(100, new Currency(x));
             var p2 = new ProductPrice(100, new Currency(y));
 
-            Assert.Throws<CurrencyMismatch>(() => p1 == p2);
-            Assert.Throws<CurrencyMismatch>(() => p1 != p2);
+            Assert.Throws<CurrencyMismatchException>(() => p1 == p2);
+            Assert.Throws<CurrencyMismatchException>(() => p1 != p2);
         }
         [Fact]
         public void EqualOperator_ShouldTrue_WhenValuesAreDiffer()

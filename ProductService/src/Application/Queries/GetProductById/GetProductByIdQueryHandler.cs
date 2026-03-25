@@ -1,5 +1,5 @@
 ﻿using Application.Exceptions;
-using Domain;
+using ProductService.Domain;
 using MediatR;
 
 namespace Application.Queries.GetProductById

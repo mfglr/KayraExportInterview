@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using ProductService.Domain;
 
 namespace Application.Queries
 {

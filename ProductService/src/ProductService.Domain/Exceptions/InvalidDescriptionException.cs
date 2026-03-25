@@ -1,6 +1,6 @@
 ﻿using Shared.Exceptions;
 
-namespace Domain.Exceptions
+namespace ProductService.Domain.Exceptions
 {
     public class InvalidDescriptionException(string message) : ValidationException(message);
 }

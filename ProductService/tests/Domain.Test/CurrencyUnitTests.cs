@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using ProductService.Domain;
+using ProductService.Domain.Exceptions;
 
 namespace Domain.Test
 {

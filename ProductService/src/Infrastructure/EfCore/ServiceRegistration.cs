@@ -1,5 +1,5 @@
 ﻿using Application;
-using Domain;
+using ProductService.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

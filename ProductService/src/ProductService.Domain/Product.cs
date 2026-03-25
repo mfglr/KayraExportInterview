@@ -1,6 +1,6 @@
 ﻿using Shared;
 
-namespace Domain
+namespace ProductService.Domain
 {
     public class Product : Entity
     {

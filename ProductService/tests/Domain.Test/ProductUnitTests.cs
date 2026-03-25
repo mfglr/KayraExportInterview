@@ -1,4 +1,6 @@
-﻿namespace Domain.Test
+﻿using ProductService.Domain;
+
+namespace Domain.Test
 {
     public class ProductUnitTests
     {

@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using ProductService.Domain;
 using Shared.Events;
 
 namespace Application.Commands.DeleteProduct

@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using ProductService.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EfCore

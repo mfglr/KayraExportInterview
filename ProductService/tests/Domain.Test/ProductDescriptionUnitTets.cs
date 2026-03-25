@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using ProductService.Domain;
+using ProductService.Domain.Exceptions;
 
 namespace Domain.Test
 {
@@ -26,7 +27,7 @@ namespace Domain.Test
         [InlineData("")]
         public void ProductDescription_ShouldThrowException_WhenValueIsEmptyOrNull(string? value)
         {
-            Assert.Throws<InvalidDescriptionException>(() => new ProductDescription(value));
+            Assert.Throws<InvalidDescriptionException>(() => new ProductDescription(value!));
         }
         [Theory]
         [InlineData("a")]
