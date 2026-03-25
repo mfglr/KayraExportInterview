@@ -3,7 +3,7 @@ using ProductService.Application.Queries;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace Infrastructure.Redis
+namespace ProductService.Infrastructure.Redis
 {
     internal class RedisProductCacheService(IDatabase database) : IProductCacheService
     {

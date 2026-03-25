@@ -1,6 +1,6 @@
 ﻿using ProductService.Application;
 
-namespace Infrastructure.EfCore
+namespace ProductService.Infrastructure.EfCore
 {
     internal class UnitOfWork(ProductContext context) : IUnitOfWork
     {

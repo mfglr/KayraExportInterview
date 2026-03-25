@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProductService.Application;
 using StackExchange.Redis;
 
-namespace Infrastructure.Redis
+namespace ProductService.Infrastructure.Redis
 {
     internal static class ServiceRegistration
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.EfCore
+namespace ProductService.Infrastructure.EfCore
 {
     public static class DbInitializer
     {

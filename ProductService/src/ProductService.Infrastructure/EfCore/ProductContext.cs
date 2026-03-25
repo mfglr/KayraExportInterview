@@ -1,10 +1,10 @@
-﻿using ProductService.Domain;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using ProductService.Domain;
 using System.Reflection;
 
-namespace Infrastructure.EfCore
+namespace ProductService.Infrastructure.EfCore
 {
     public class ProductContext(DbContextOptions<ProductContext> options) : DbContext(options)
     {

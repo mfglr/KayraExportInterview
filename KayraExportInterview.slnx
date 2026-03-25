@@ -11,10 +11,10 @@
   </Folder>
   <Folder Name="/ProductService/" />
   <Folder Name="/ProductService/src/">
-    <Project Path="ProductService/src/Infrastructure/Infrastructure.csproj" Id="f764e46b-8074-4408-8e5a-8d5f013dad5b" />
     <Project Path="ProductService/src/Presentation.Api/Presentation.Api.csproj" Id="81c91285-54c6-416b-af38-4fb9f6d372aa" />
     <Project Path="ProductService/src/ProductService.Application/ProductService.Application.csproj" Id="e2b31120-a91a-406e-baf7-13df6a96d060" />
     <Project Path="ProductService/src/ProductService.Domain/ProductService.Domain.csproj" Id="288a9ffc-1444-4202-9d9b-da011ea99c2f" />
+    <Project Path="ProductService/src/ProductService.Infrastructure/ProductService.Infrastructure.csproj" Id="663a3bf8-d3dc-4066-91b8-c25de67fb6cd" />
   </Folder>
   <Folder Name="/ProductService/tests/">
     <Project Path="ProductService/tests/Domain.Test/Domain.Test.csproj" Id="cff6d654-6374-4b84-9f99-bdbd57d88446" />

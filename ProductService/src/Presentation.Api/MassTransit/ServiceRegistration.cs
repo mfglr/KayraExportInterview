@@ -1,7 +1,7 @@
-﻿using Infrastructure.EfCore;
-using MassTransit;
+﻿using MassTransit;
 using Presentation.Api.MassTransit;
 using Presentation.Api.MassTransit.Consumers.DeleteUserProducts_OnUserDeleted;
+using ProductService.Infrastructure.EfCore;
 
 namespace Presentation.Api.MassTransit
 {

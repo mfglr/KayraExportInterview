@@ -1,5 +1,5 @@
-using Infrastructure;
-using Infrastructure.EfCore;
+using ProductService.Infrastructure.EfCore;
+using ProductService.Infrastructure;
 using Presentation.Api.Auth;
 using Presentation.Api.MassTransit;
 using Presentation.Api.Middlewares;

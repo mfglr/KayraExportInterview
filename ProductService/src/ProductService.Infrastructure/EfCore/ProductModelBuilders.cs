@@ -1,8 +1,8 @@
-﻿using ProductService.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProductService.Domain;
 
-namespace Infrastructure.EfCore
+namespace ProductService.Infrastructure.EfCore
 {
     internal class ProductModelBuilders : IEntityTypeConfiguration<Product>
     {

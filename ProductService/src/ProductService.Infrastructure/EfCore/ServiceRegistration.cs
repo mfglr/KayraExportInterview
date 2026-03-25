@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProductService.Application;
 using ProductService.Domain;
 
-namespace Infrastructure.EfCore
+namespace ProductService.Infrastructure.EfCore
 {
     internal static class ServiceRegistration
     {

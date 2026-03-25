@@ -1,7 +1,7 @@
-﻿using ProductService.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductService.Domain;
 
-namespace Infrastructure.EfCore
+namespace ProductService.Infrastructure.EfCore
 {
     internal class ProductRepository(ProductContext context) : IProductRepository
     {

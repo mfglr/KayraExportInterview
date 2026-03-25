@@ -1,11 +1,11 @@
-﻿using Infrastructure.EfCore;
-using Infrastructure.Redis;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductService.Infrastructure.EfCore;
+using ProductService.Infrastructure.Redis;
 
-namespace Infrastructure
+namespace ProductService.Infrastructure
 {
-    public static class ServiceRegisgration
+    public static class ServiceRegistration
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) =>
             services
