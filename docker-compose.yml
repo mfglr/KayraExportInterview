@@ -16,8 +16,15 @@ services:
       context: .
       dockerfile: AuthService/src/AuthService.Api/Dockerfile
 
+  productservice.api:
+    image: ${DOCKER_REGISTRY-}productserviceapi
+    build:
+      context: .
+      dockerfile: ProductService/src/ProductService.Api/Dockerfile
+
 volumes:
   elastic_search_volume:
   rabbitmq_volume:
   
+
 
