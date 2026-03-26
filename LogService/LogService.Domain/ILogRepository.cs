@@ -7,5 +7,16 @@
 
         Task<IReadOnlyCollection<Log>> GetByTraceIdAsync(string traceId, string? cursor, int pageSize, CancellationToken cancellationToken = default);
         Task<IReadOnlyCollection<Log>> GetByLevelAsync(string level, string? cursor, int pageSize, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<Log>> SearchAsync(
+            string? traceId,
+            string? serviceName,
+            string? level,
+            string? controller,
+            string? action,
+            string? key,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken = default
+        );
     }
 }

@@ -13,7 +13,6 @@ namespace LogService.Application.Queries
 
         public LogResponse Map(Log log) =>
             new(
-                log.Id,
                 log.ServiceName,
                 log.Timestamp,
                 log.Level,

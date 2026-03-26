@@ -3,7 +3,7 @@ using LogService.Domain;
 
 namespace LogService.Infractructure.ElasticSearch
 {
-    internal static class Pagination
+    internal static class PaginationExtension
     {
         public static SearchRequestDescriptor<Log> ToPage(this SearchRequestDescriptor<Log> srd, string? cursor, int pageSize) =>
             cursor != null

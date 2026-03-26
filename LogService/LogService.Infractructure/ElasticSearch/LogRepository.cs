@@ -18,8 +18,8 @@ namespace LogService.Infractructure.ElasticSearch
                 search =>
                     search
                         .Indices(IndexNameProvider.IndexName)
-                        .ToPage(cursor, pageSize)
-                        .Query(q => q.Term(t => t.Field(x => x.Level).Value(level))),
+                        .Query(q => q.Term(t => t.Field(x => x.Level).Value(level)))
+                        .ToPage(cursor, pageSize),
                 cancellationToken: cancellationToken
             );
             return result.Documents;
@@ -31,8 +31,32 @@ namespace LogService.Infractructure.ElasticSearch
                 search =>
                     search
                         .Indices(IndexNameProvider.IndexName)
-                        .ToPage(cursor, pageSize)
-                        .Query(q => q.Term(t => t.Field(x => x.TraceId).Value(traceId))),
+                        .Query(q => q.Term(t => t.Field(x => x.TraceId).Value(traceId)))
+                        .ToPage(cursor, pageSize),
+                cancellationToken: cancellationToken
+            );
+            return result.Documents;
+        }
+
+        public async Task<IReadOnlyCollection<Log>> SearchAsync(
+            string? traceId,
+            string? serviceName,
+            string? level,
+            string? controller,
+            string? action,
+            string? key,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var result = await client.SearchAsync<Log>(
+                search =>
+                    search
+                        .Indices(IndexNameProvider.IndexName)
+                        .ToQuery(traceId,serviceName,level,controller,action, key)
+                        .From(page * pageSize)
+                        .Size(pageSize),
                 cancellationToken: cancellationToken
             );
             return result.Documents;
