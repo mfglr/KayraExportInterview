@@ -23,6 +23,8 @@ namespace LogService.Worker.RabbitMQ
             using var connection = await factory.CreateConnectionAsync(stoppingToken);
             using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
+            await channel.ExchangeDeclareAsync(options.LogExchangeName, "fanout", durable: true,cancellationToken: stoppingToken);
+
             await channel.QueueDeclareAsync(
                 queue: _queueName,
                 durable: true,
