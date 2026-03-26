@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>5e71070b-8ccc-4a99-bda3-05fd49514f3d</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LogService.Application\LogService.Application.csproj" />
+    <ProjectReference Include="..\LogService.Infractructure\LogService.Infractructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -11,23 +11,23 @@ namespace AuthService.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UsersController(ISender sender) : ControllerBase
+    public class UsersController(IMediator mediator) : ControllerBase
     {
         [HttpPost]
         public Task<CreateUserCommandResponse> Create(CreateUserCommandRequest request, CancellationToken cancellationToken) =>
-            sender.Send(request, cancellationToken);
+            mediator.Send(request, cancellationToken);
 
         [HttpPost]
         public Task<TokenResponse> Login(LoginCommandRequest request, CancellationToken cancellationToken) =>
-            sender.Send(request, cancellationToken);
+            mediator.Send(request, cancellationToken);
 
         [HttpPost]
         public Task<TokenResponse> LoginByRefreshToken(LoginByRefreshTokenCommandRequest request, CancellationToken cancellationToken) =>
-            sender.Send(request, cancellationToken);
+            mediator.Send(request, cancellationToken);
 
         [Authorize("user")]
         [HttpDelete]
         public Task Delete(CancellationToken cancellationToken) =>
-            sender.Send(new DeleteUserCommandRequest(), cancellationToken);
+            mediator.Send(new DeleteUserCommandRequest(), cancellationToken);
     }
 }

@@ -10,6 +10,7 @@
     <Project Path="AuthService/tests/AuthService.Domain.Test/AuthService.Domain.Test.csproj" Id="0206c2f5-c342-4e0e-8626-da1f16615055" />
   </Folder>
   <Folder Name="/LogService/">
+    <Project Path="LogService/LogService.Api/LogService.Api.csproj" Id="20edb40d-09a3-4796-895f-9559a9485d7b" />
     <Project Path="LogService/LogService.Application/LogService.Application.csproj" />
     <Project Path="LogService/LogService.Domain/LogService.Domain.csproj" Id="a083fe25-7358-4182-835b-b73f6bea912f" />
     <Project Path="LogService/LogService.Infractructure/LogService.Infractructure.csproj" Id="861ead53-54fd-4bca-b372-513f5d45e20b" />

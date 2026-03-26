@@ -7,6 +7,7 @@
     );
 
     public record LogResponse(
+        string Id,
         string ServiceName,
         DateTime TimeStamp,
         string Level,
