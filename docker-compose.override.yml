@@ -34,6 +34,7 @@ services:
 
   rabbitmq:
     container_name: rabbitmq
+    restart: always
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -42,11 +43,13 @@ services:
 
   redis:
     container_name: redis
+    restart: always
     ports:
       - "6379:6379"
 
   authservice.api:
     container_name: authserviceapi
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
@@ -73,6 +76,8 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
 
   productservice.api:
+    container_name: productserviceapi
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
