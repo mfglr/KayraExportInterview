@@ -22,9 +22,23 @@ services:
       context: .
       dockerfile: ProductService/src/ProductService.Api/Dockerfile
 
+  logservice.api:
+    image: ${DOCKER_REGISTRY-}logserviceapi
+    build:
+      context: .
+      dockerfile: LogService/LogService.Api/Dockerfile
+
+  logservice.worker:
+    image: ${DOCKER_REGISTRY-}logserviceworker
+    build:
+      context: .
+      dockerfile: LogService/LogService.Worker/Dockerfile
+
 volumes:
   elastic_search_volume:
   rabbitmq_volume:
   
+
+
 
 

@@ -9,6 +9,8 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=123456789Abc*
       - MSSQL_PID=Evaluation
+    networks:
+      - app-network
   
   elasticsearch:
     container_name: elasticsearch
@@ -21,7 +23,7 @@ services:
     ports:
       - "9200:9200"
     networks:
-      - elk-network
+      - app-network
   
   kibana:
     container_name: kibana
@@ -30,7 +32,7 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - elk-network
+      - app-network
 
   rabbitmq:
     container_name: rabbitmq
@@ -40,12 +42,16 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq_volume:/var/lib/rabbitmq
+    networks:
+      - app-network
 
   redis:
     container_name: redis
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - app-network
 
   authservice.api:
     container_name: authserviceapi
@@ -53,27 +59,27 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      
       - ConnectionStrings:SqlServer=Server=mssql,1433;Database=AuthDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
-
       - RabbitMQOptions:Host=rabbitmq
-      - RabbitMQOptions:VirtualHost=KayraExport
+      - RabbitMQOptions:VirtualHost=/
       - RabbitMQOptions:Password=guest
       - RabbitMQOptions:UserName=guest
       - RabbitMQOptions:LogExchangeName=LogExchange
-      
       - AuthOptions:Issuer=http://authservice.api
       - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
-      
       - TokenOptions:Issuer=http://authservice.api
       - TokenOptions:AccessTokenValidtyPeriod=15
       - TokenOptions:RefreshTokenValidtyPeriod=30
       - TokenOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key 
     ports:
       - "5001:8080"
+    depends_on:
+      - mssql
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    networks:
+      - app-network
 
   productservice.api:
     container_name: productserviceapi
@@ -81,27 +87,58 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-
       - ConnectionStrings:SqlServer=Server=mssql,1433;Database=ProductDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
-
       - RabbitMQOptions:Host=rabbitmq
-      - RabbitMQOptions:VirtualHost=KayraExport
+      - RabbitMQOptions:VirtualHost=/
       - RabbitMQOptions:Password=guest
       - RabbitMQOptions:UserName=guest
       - RabbitMQOptions:LogExchangeName=LogExchange
-      
       - AuthOptions:Issuer=http://authservice.api
       - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
-
       - Redis:Host=redis:6379
     ports:
       - "5002:8080"
+    depends_on:
+      - mssql
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    networks:
+      - app-network
+
+  logservice.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ElasticSearchOptions:Host=http://elasticsearch:9200/
+    ports:
+      - "5003:8080"
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    networks:
+      - app-network
+
+  logservice.worker:
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ElasticSearchOptions:Host=http://elasticsearch:9200/
+      - RabbitMQOptions:Host=rabbitmq
+      - RabbitMQOptions:VirtualHost=/
+      - RabbitMQOptions:Password=guest
+      - RabbitMQOptions:UserName=guest
+      - RabbitMQOptions:LogExchangeName=LogExchange
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+    networks:
+      - app-network
 
 networks:
-  elk-network:
+  app-network:
     driver: bridge
-
 

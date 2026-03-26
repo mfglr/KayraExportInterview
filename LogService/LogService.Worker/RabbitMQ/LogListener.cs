@@ -13,45 +13,59 @@ namespace LogService.Worker.RabbitMQ
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var factory = new ConnectionFactory {
-                HostName =  options.Host,
-                VirtualHost = options.VirtualHost,
-                UserName = options.UserName,
-                Password = options.Password
-            };
-
-            using var connection = await factory.CreateConnectionAsync(stoppingToken);
-            using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
-
-            await channel.ExchangeDeclareAsync(options.LogExchangeName, "fanout", durable: true,cancellationToken: stoppingToken);
-
-            await channel.QueueDeclareAsync(
-                queue: _queueName,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                cancellationToken: stoppingToken
-            );
-            await channel.QueueBindAsync(
-                queue: _queueName,
-                exchange: options.LogExchangeName,
-                routingKey: "",
-                cancellationToken:stoppingToken
-            );
-
-            var consumer = new AsyncEventingBasicConsumer(channel);
-            consumer.ReceivedAsync += async (model, @event) =>
+            while (!stoppingToken.IsCancellationRequested)
             {
-                var body = @event.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                var request = JsonSerializer.Deserialize<CreateLogCommandRequest>(message)!;
-                
-                await ConsumeAsync(request, stoppingToken);
-            };
+                try
+                {
+                    var factory = new ConnectionFactory
+                    {
+                        HostName = options.Host,
+                        VirtualHost = options.VirtualHost,
+                        UserName = options.UserName,
+                        Password = options.Password,
+                        AutomaticRecoveryEnabled = true,
+                        TopologyRecoveryEnabled = true,
+                        RequestedHeartbeat = TimeSpan.FromSeconds(3)
+                    };
 
-            await channel.BasicConsumeAsync(_queueName, autoAck: true, consumer: consumer, cancellationToken: stoppingToken);
+                    using var connection = await factory.CreateConnectionAsync(stoppingToken);
+                    using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
-            await Task.Delay(Timeout.Infinite, stoppingToken);
+                    await channel.ExchangeDeclareAsync(options.LogExchangeName, "fanout", durable: true, cancellationToken: stoppingToken);
+
+                    await channel.QueueDeclareAsync(
+                        queue: _queueName,
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false,
+                        cancellationToken: stoppingToken
+                    );
+                    await channel.QueueBindAsync(
+                        queue: _queueName,
+                        exchange: options.LogExchangeName,
+                        routingKey: "",
+                        cancellationToken: stoppingToken
+                    );
+
+                    var consumer = new AsyncEventingBasicConsumer(channel);
+                    consumer.ReceivedAsync += async (model, @event) =>
+                    {
+                        var body = @event.Body.ToArray();
+                        var message = Encoding.UTF8.GetString(body);
+                        var request = JsonSerializer.Deserialize<CreateLogCommandRequest>(message)!;
+
+                        await ConsumeAsync(request, stoppingToken);
+                    };
+
+                    await channel.BasicConsumeAsync(_queueName, autoAck: true, consumer: consumer, cancellationToken: stoppingToken);
+
+                    await Task.Delay(Timeout.Infinite, stoppingToken);
+                }
+                catch
+                {
+                    await Task.Delay(1000, stoppingToken);
+                }
+            }
         }
 
         private async Task ConsumeAsync(CreateLogCommandRequest request, CancellationToken cancellationToken)
