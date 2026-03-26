@@ -21,7 +21,15 @@ namespace LogService.Infractructure.ElasticSearch
                                     .Keyword(x => x.TraceId)
                                     .Keyword(x => x.Controller)
                                     .Keyword(x => x.Action)
-                                    .Object(x => x.Exception)
+                                    .Object(
+                                        x => x.Exception,
+                                        obj => obj.Properties(
+                                            p => p
+                                                .Text("Message")
+                                                .Text("StackTrace")
+                                                .Object("InnerException",i => i.Properties(p => p.Text("Message").Text("StackTrace")))
+                                        )
+                                    )
                             )
                         )
                 );
