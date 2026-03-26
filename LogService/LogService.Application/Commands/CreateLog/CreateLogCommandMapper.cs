@@ -14,7 +14,7 @@ namespace LogService.Application.Commands.CreateLog
         public Log Map(CreateLogCommandRequest request) =>
             new(
                 request.ServiceName,
-                request.TimeStamp,
+                request.Timestamp,
                 request.Level,
                 request.MessageTemplate,
                 request.TraceId,

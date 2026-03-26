@@ -15,7 +15,7 @@ namespace LogService.Infractructure.ElasticSearch
                                 properties => properties
                                     .Keyword(x => x.Id)
                                     .Keyword(x => x.ServiceName)
-                                    .Date(x => x.TimeStamp,x => x.Index(false))
+                                    .Date(x => x.Timestamp,x => x.Index(false))
                                     .Keyword(x => x.Level)
                                     .Text(x => x.MessageTemplate)
                                     .Keyword(x => x.TraceId)

@@ -13,7 +13,7 @@ namespace LogService.Application.Commands.CreateLog
     [method: JsonConstructor]
     public record CreateLogCommandRequest(
         string ServiceName,
-        DateTime TimeStamp,
+        DateTime Timestamp,
         string Level,
         string MessageTemplate,
         string? TraceId,

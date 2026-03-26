@@ -15,7 +15,7 @@ namespace LogService.Application.Queries
             new(
                 log.Id,
                 log.ServiceName,
-                log.TimeStamp,
+                log.Timestamp,
                 log.Level,
                 log.MessageTemplate,
                 log.TraceId,
