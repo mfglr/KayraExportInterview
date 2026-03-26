@@ -10,7 +10,14 @@ services:
   redis:
     image: redis
 
+  authservice.api:
+    image: ${DOCKER_REGISTRY-}authserviceapi
+    build:
+      context: .
+      dockerfile: AuthService/src/AuthService.Api/Dockerfile
+
 volumes:
   elastic_search_volume:
   rabbitmq_volume:
   
+

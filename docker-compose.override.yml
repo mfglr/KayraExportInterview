@@ -45,6 +45,35 @@ services:
     ports:
       - "6379:6379" 
 
+  authservice.api:
+    container_name: authserviceapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      
+      - ConnectionStrings:SqlServer=Server=mssql,1433;Database=AuthDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
+
+      - RabbitMQOptions:Host=rabbitmq
+      - RabbitMQOptions:VirtualHost=KayraExport
+      - RabbitMQOptions:Password=guest
+      - RabbitMQOptions:UserName=guest
+      - RabbitMQOptions:LogExchangeName=LogExchange
+      
+      - AuthOptions:Issuer=http://authservice.api
+      - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
+      
+      - TokenOptions:Issuer=http://authservice.api
+      - TokenOptions:AccessTokenValidtyPeriod=15
+      - TokenOptions:RefreshTokenValidtyPeriod=30
+      - TokenOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key 
+    ports:
+      - "5001:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+
+
 networks:
   elk-network:
     driver: bridge
+
