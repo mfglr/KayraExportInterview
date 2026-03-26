@@ -12,6 +12,8 @@
   <Folder Name="/LogService/">
     <Project Path="LogService/LogService.Application/LogService.Application.csproj" />
     <Project Path="LogService/LogService.Domain/LogService.Domain.csproj" Id="a083fe25-7358-4182-835b-b73f6bea912f" />
+    <Project Path="LogService/LogService.Infractructure/LogService.Infractructure.csproj" Id="861ead53-54fd-4bca-b372-513f5d45e20b" />
+    <Project Path="LogService/LogService.Worker/LogService.Worker.csproj" Id="0148ba5b-d5ee-45b1-8648-a225e9cd0bd2" />
   </Folder>
   <Folder Name="/ProductService/" />
   <Folder Name="/ProductService/src/">
