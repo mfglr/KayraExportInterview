@@ -26,6 +26,9 @@
   <Folder Name="/ProductService/tests/">
     <Project Path="ProductService/tests/Domain.Test/Domain.Test.csproj" Id="cff6d654-6374-4b84-9f99-bdbd57d88446" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="Gateway.Api/Gateway.Api.csproj" Id="9bd052ed-efc3-427e-a1b4-8264cdacb96e" />
   <Project Path="Shared/Shared.csproj" Id="17816302-bdf4-4c6b-b233-6dab40e01fda" />
 </Solution>

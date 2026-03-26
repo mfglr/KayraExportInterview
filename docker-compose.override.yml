@@ -1,0 +1,50 @@
+services:
+  
+  mssql:
+    container_name: mssql
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=123456789Abc*
+      - MSSQL_PID=Evaluation
+  
+  elasticsearch:
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - elastic_search_volume:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elk-network
+  
+  kibana:
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+
+  rabbitmq:
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_volume:/var/lib/rabbitmq
+
+  redis:
+    container_name: redis
+    ports:
+      - "6379:6379" 
+
+networks:
+  elk-network:
+    driver: bridge
