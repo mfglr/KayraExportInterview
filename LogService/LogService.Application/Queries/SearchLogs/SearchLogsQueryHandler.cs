@@ -14,8 +14,6 @@ namespace LogService.Application.Queries.SearchLogs
                 request.TraceId,
                 request.ServiceName,
                 request.Level,
-                request.Controller,
-                request.Action,
                 request.Key,
                 request.Page,
                 request.PageSize,

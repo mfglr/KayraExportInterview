@@ -19,8 +19,7 @@ namespace LogService.Infractructure.ElasticSearch
                                     .Keyword(x => x.Level)
                                     .Text(x => x.MessageTemplate)
                                     .Keyword(x => x.TraceId)
-                                    .Keyword(x => x.Controller)
-                                    .Keyword(x => x.Action)
+                                    .Keyword(x => x.RequestPaths)
                                     .Object(
                                         x => x.Exception,
                                         obj => obj.Properties(

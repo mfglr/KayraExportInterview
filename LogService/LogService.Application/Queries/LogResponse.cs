@@ -12,8 +12,7 @@
         string Level,
         string MessageTemplate,
         string? TraceId,
-        string? Controller,
-        string? Action,
+        IEnumerable<string> RequestPaths,
         LogResponse_Exception? Exception
     );
 }

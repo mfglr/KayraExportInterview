@@ -14,8 +14,7 @@ namespace LogService.Application.Commands.CreateLogs
         string Level,
         string MessageTemplate,
         string? TraceId,
-        string? Controller,
-        string? Action,
+        IEnumerable<string> RequestPaths,
         CreateLogsCommandRequest_Exception? Exception
     );
 

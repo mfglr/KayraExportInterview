@@ -11,8 +11,6 @@ namespace LogService.Infractructure.ElasticSearch
             string? traceId,
             string? serviceName,
             string? level,
-            string? controller,
-            string? action,
             string? key
         )
         {
@@ -22,15 +20,12 @@ namespace LogService.Infractructure.ElasticSearch
                 bqd = bqd.Filter(f => f.Term(t => t.Field(f => f.ServiceName).Value(serviceName)));
             if (!string.IsNullOrWhiteSpace(level))
                 bqd = bqd.Filter(f => f.Term(x => x.Field(x => x.Level).Value(level)));
-            if(!string.IsNullOrWhiteSpace(controller))
-                bqd = bqd.Filter(f => f.Term(t => t.Field(f => f.Controller).Value(controller)));
-            if (!string.IsNullOrWhiteSpace(action))
-                bqd = bqd.Filter(f => f.Term(t => t.Field(f => f.Action).Value(action)));
             if (!string.IsNullOrWhiteSpace(key))
                 bqd = bqd
                     .Must(
                         f => f.MultiMatch(
                             p => p.Fields(
+                                f => f.RequestPaths,
                                 f => f.MessageTemplate,
                                 f => f.Exception.Message,
                                 f => f.Exception.StackTrace,
@@ -47,10 +42,8 @@ namespace LogService.Infractructure.ElasticSearch
             string? traceId,
             string? serviceName,
             string? level,
-            string? controller,
-            string? action,
             string? key
         ) => srd
-                .Query(x => x.Bool(b => b.ToBoolQuery(traceId, serviceName, level, controller, action, key)));
+                .Query(x => x.Bool(b => b.ToBoolQuery(traceId, serviceName, level, key)));
     }
 }

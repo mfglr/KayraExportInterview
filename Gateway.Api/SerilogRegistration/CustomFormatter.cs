@@ -6,13 +6,11 @@ namespace Gateway.Api.SerilogRegistration
 {
     public class CustomFormatter(string serviceName) : ITextFormatter
     {
-        private readonly string _serviceName = serviceName;
-
         public void Format(LogEvent logEvent, TextWriter output)
         {
             var logObj = new Dictionary<string, object>
             {
-                ["ServiceName"] = _serviceName,
+                ["ServiceName"] = serviceName,
                 ["Timestamp"] = logEvent.Timestamp,
                 ["Level"] = logEvent.Level.ToString(),
                 ["MessageTemplate"] = logEvent.MessageTemplate.Text,
@@ -42,10 +40,8 @@ namespace Gateway.Api.SerilogRegistration
 
             if (!string.IsNullOrWhiteSpace(requestPath))
             {
-                var controller = requestPath.Split("/")[1];
-                var action = requestPath.Split("/")[2];
-                logObj["Controller"] = controller;
-                logObj["Action"] = action;
+                var requestPaths = requestPath.Replace("\\", "").Replace("\"", "").Replace("/", " ").Trim().Split(" ");
+                logObj["RequestPaths"] = requestPaths;
             }
 
             output.WriteLine(JsonSerializer.Serialize(logObj));

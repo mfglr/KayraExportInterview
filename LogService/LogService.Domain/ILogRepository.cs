@@ -11,8 +11,6 @@
             string? traceId,
             string? serviceName,
             string? level,
-            string? controller,
-            string? action,
             string? key,
             int page,
             int pageSize,

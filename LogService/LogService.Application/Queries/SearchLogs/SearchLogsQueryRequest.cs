@@ -6,8 +6,6 @@ namespace LogService.Application.Queries.SearchLogs
         string? TraceId,
         string? ServiceName,
         string? Level,
-        string? Controller,
-        string? Action,
         string? Key,
         int Page,
         int PageSize

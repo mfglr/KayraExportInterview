@@ -18,8 +18,7 @@ namespace LogService.Application.Queries
                 log.Level,
                 log.MessageTemplate,
                 log.TraceId,
-                log.Controller,
-                log.Action,
+                log.RequestPaths,
                 log.Exception != null ? Map(log.Exception) : null
             );
     }

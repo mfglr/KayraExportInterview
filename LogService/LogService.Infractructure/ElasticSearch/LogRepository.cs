@@ -42,8 +42,6 @@ namespace LogService.Infractructure.ElasticSearch
             string? traceId,
             string? serviceName,
             string? level,
-            string? controller,
-            string? action,
             string? key,
             int page,
             int pageSize,
@@ -54,7 +52,7 @@ namespace LogService.Infractructure.ElasticSearch
                 search =>
                     search
                         .Indices(IndexNameProvider.IndexName)
-                        .ToQuery(traceId,serviceName,level,controller,action, key)
+                        .ToQuery(traceId,serviceName,level,key)
                         .From(page * pageSize)
                         .Size(pageSize),
                 cancellationToken: cancellationToken
