@@ -1,4 +1,5 @@
 ﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.Security;
 using LogService.Domain;
 
 namespace LogService.Infractructure.ElasticSearch
@@ -12,27 +13,31 @@ namespace LogService.Infractructure.ElasticSearch
         public Task CreateAsync(IEnumerable<Log> logs, CancellationToken cancellationToken = default) =>
             client.IndexManyAsync(logs, IndexNameProvider.IndexName, cancellationToken: cancellationToken);
 
-        public async Task<IReadOnlyCollection<Log>> GetByLevelAsync(string level, string? cursor, int pageSize, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyCollection<Log>> GetByLevelAsync(string level, int page, int pageSize, CancellationToken cancellationToken = default)
         {
             var result = await client.SearchAsync<Log>(
                 search =>
                     search
                         .Indices(IndexNameProvider.IndexName)
                         .Query(q => q.Term(t => t.Field(x => x.Level).Value(level)))
-                        .ToPage(cursor, pageSize),
+                        .Sort(x => x.Field(x => x.Id,SortOrder.Desc))
+                        .From(page * pageSize)
+                        .Size(pageSize),
                 cancellationToken: cancellationToken
             );
             return result.Documents;
         }
 
-        public async Task<IReadOnlyCollection<Log>> GetByTraceIdAsync(string traceId, string? cursor, int pageSize, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyCollection<Log>> GetByTraceIdAsync(string traceId, int page, int pageSize, CancellationToken cancellationToken = default)
         {
             var result = await client.SearchAsync<Log>(
                 search =>
                     search
                         .Indices(IndexNameProvider.IndexName)
                         .Query(q => q.Term(t => t.Field(x => x.TraceId).Value(traceId)))
-                        .ToPage(cursor, pageSize),
+                        .Sort(x => x.Field(x => x.Id, SortOrder.Desc))
+                        .From(page * pageSize)
+                        .Size(pageSize),
                 cancellationToken: cancellationToken
             );
             return result.Documents;

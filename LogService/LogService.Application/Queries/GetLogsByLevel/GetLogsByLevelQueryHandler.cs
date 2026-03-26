@@ -10,7 +10,7 @@ namespace LogService.Application.Queries.GetLogsByLevel
     {
         public async Task<List<LogResponse>> Handle(GetLogsByLevelQueryRequest request, CancellationToken cancellationToken)
         {
-            var logs = await logRepository.GetByLevelAsync(request.Level, request.Cursor, request.PageSize, cancellationToken);
+            var logs = await logRepository.GetByLevelAsync(request.Level, request.Page, request.PageSize, cancellationToken);
             return [.. logs.Select(mapper.Map)];
         }
     }

@@ -13,6 +13,7 @@ namespace LogService.Application.Commands.CreateLog
 
         public Log Map(CreateLogCommandRequest request) =>
             new(
+                Guid.CreateVersion7().ToString(),
                 request.ServiceName,
                 request.Timestamp,
                 request.Level,

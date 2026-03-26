@@ -8,7 +8,6 @@ namespace LogService.Application.Commands.CreateLog
         public Task Handle(CreateLogCommandRequest request, CancellationToken cancellationToken)
         {
             var log = mapper.Map(request);
-            log.Create();
             return logRepository.CreateAsync(log, cancellationToken);
         }
     }

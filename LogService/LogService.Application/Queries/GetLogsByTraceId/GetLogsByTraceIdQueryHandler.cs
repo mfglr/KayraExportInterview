@@ -10,7 +10,7 @@ namespace LogService.Application.Queries.GetLogsByTraceId
     {
         public async Task<List<LogResponse>> Handle(GetLogsByTraceIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var logs = await logRepository.GetByTraceIdAsync(request.TraceId, request.Cursor, request.PageSize, cancellationToken);
+            var logs = await logRepository.GetByTraceIdAsync(request.TraceId, request.Page, request.PageSize, cancellationToken);
             return [.. logs.Select(mapper.Map)];
         }
     }
