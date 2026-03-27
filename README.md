@@ -150,6 +150,17 @@ Bu projede ürün listeleme [Get All Products](#get-all-products) endpoint’i i
  Eski cache verileri Redis’te kalmaya devam eder (memory trade-off). TTL eklenerek bu problem minimize edilebilir ya da clean-up worker yazılabilir.
 </p>
 
+## Outbox Pattern
+### Outbox Pattern Nedir?
+<p>
+ Bir servis, kendi veritabanına veri yazarken aynı transaction içinde "outbox" tablosuna event kaydeder. Bu event, sistemler arası iletişim için kullanılacak asenkron mesajların kaynağı olur. Daha sonra bir worker/consumer, outbox tablosunu okuyarak mesajları diğer servis veya message broker’a (RabbitMQ, Kafka vb.) gönderir.
+</p>
+
+### Neden Outbox Pattern?
+<p>
+ Outbox Pattern kullanılmazsa, bir servis siparişi kaydederken diğer servislere event’leri gönderilemeyebilir ve veri tutarsızlığı oluşabilir; Outbox Pattern ile sipariş kaydı ve event publish aynı transaction içinde güvenli şekilde yönetilir.
+</p>
+
 ## API Dokümantasyonu
 
 ### Users
