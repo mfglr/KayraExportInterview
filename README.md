@@ -91,25 +91,26 @@
   
 ## Kurulum
 
-##### Repoyu klonla
-<code>git clone https://github.com/mfglr/KayraExportInterview.git</code>
+<b>Repoyu klonla</b>
+```cmd
+ git clone https://github.com/mfglr/KayraExportInterview.git
+```
 
-##### Proje dizinine gir
-<code>cd KayraExportInterview</code>
+<b>Proje dizinine gir</b>
+```cmd
+cd KayraExportInterview</code>
+```
 
-##### Prod branch'ini indir ve geçiş yap
-<p>
-  <code>git fetch origin</code>
-</p>
-<p>
-  <code>git checkout -b prod/v1.0.0 origin/prod/v1.0.0</code>
-</p>
+<b>Prod branch'ini indir ve geçiş yap</b>
+```cmd
+git fetch origin
+git checkout -b prod/v1.0.0 origin/prod/v1.0.0
+```
 
-##### Docker Compose ile build ve çalıştır (arka planda)
-<code>docker-compose up --build -d</code>
-
-##### Servis loglarını takip etmek istersen
-<code>docker-compose logs -f</code>
+<b>Docker Compose ile build ve çalıştır</b>
+```cmd
+docker-compose up --build -d
+```
 
 ## Product List Caching ve Cache Invalidation Stratejisi
 
