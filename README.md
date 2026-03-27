@@ -107,6 +107,49 @@
 ##### Servis loglarını takip etmek istersen
 <code>docker-compose logs -f</code>
 
+## Product List Caching ve Cache Invalidation Stratejisi
+
+Bu projede ürün listeleme [Get All Products](#get-all-products) endpoint’i için Redis tabanlı cache mekanizması uygulanmıştır. Cache invalidation problemi, versioning (versiyonlama) yaklaşımı ile çözülmüştür.
+
+ ### Amaç
+  - Sık kullanılan ürün listeleme sorgularını cache’lemek</ol>
+  - Veritabanı yükünü azaltmak</ol>
+  - Tutarlı (stale olmayan) veri sunmak</ol>
+
+### Strateji: Version-Based Cache Invalidation
+<p>
+ Ürün listeleri cache’lenirken her cache key, global bir liste versiyonu ile birlikte oluşturulur.
+</p>
+
+<code>list:{pageSize}:{cursor}:{ProductListVersionKey}</code>
+
+### Cache Invalidation Mekanizması
+<p>
+ Aşağıdaki durumlarda cache manuel silinmez, bunun yerine versiyon artırılır:
+ <ul>
+  <li>Yeni ürün eklenmesi</li>
+  <li>Ürün güncellenmesi</li>
+  <li>Ürün silinmesi</li>
+</ul>
+</p>
+
+<code>Increase(ProductListVersionKey)</code>
+
+<p>
+ Bu işlem, eski cache key’leri geçersiz hale getirir ve yeni isteklerde farklı bir version ile yeni cache oluşturulur.
+</p>
+
+### Liste Çekme
+
+<p>
+ Önce Redis’ten mevcut ProductListVersionKey alınır. Daha sonra bu version ile page okunur. Page varsa gönderilir yoksa veritabanından okunur.
+</p>
+
+### Trade-Off
+<p>
+ Eski cache verileri Redis’te kalmaya devam eder (memory trade-off). TTL eklenerek bu problem minimize edilebilir ya da clean-up worker yazılabilir.
+</p>
+
 ## API Dokümantasyonu
 
 ### Users
