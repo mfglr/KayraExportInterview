@@ -173,6 +173,182 @@ MediatR, Mediator Patterni uygulayan ve C# ekosisteminde yaygın kullanılan bir
  Outbox patternini MassTransit kütüphanesi aracılığıyla uyguluyorum.
 </p>
 
+
+# PRODUCT SERVICE
+
+<p>
+ Product Service, ürünlerin yönetimi ve sorgulanmasını sağlayan mikroservistir. CRUD işlemleri, asenkron event handling ve caching ile güvenilir ve ölçeklenebilir bir altyapı sunar.
+</p>
+
+## Product Domain
+
+| Domain Nesnesi         | Açıklama |
+|------------------------|----------|
+| **Product**            | Aggregate root. Product' ın tüm bilgilerini kapsar. |
+| **Currency**           | Value Object. Ürün fiyatlarının para birimini temsil eder (TRY, USD, EUR). |
+| **ProductDescription** | Value Object.Ürünün açıklama ve detay bilgilerini tutar. |
+| **ProductPrice**       | Value Object. Ürünün fiyat bilgisi; Currency ile ilişkilidir. |
+| **ProductTitle**       | Value Object. Ürünün başlık bilgisi. |
+| **IProductRepository** | Repository. Product aggregate’ini veri kaynağından almak ve kaydetmek için kullanılan interface. |
+
+
+<p>
+ IProductRepository arayüzü sayesinde veri erişim katmanını soyutladım. Bu sayede veri tabanı teknolojisinde yapılacak değişiklikler, arayüzü kullanan servisler veya diğer bağımlı sınıfları etkilemeden uygulanabilir; böylece sistemin esnekliği ve sürdürülebilirliği artar.
+</p>
+
+### Neden "ProductDescription", "ProductPrice", "ProductTitle" primitif değil value object?
+<p>
+ Value Object’ler sayesinde domain kuralları ve validasyonlar tek bir merkezi noktada toplanabilir. Örneğin, her metin “ProductTitle” olamaz; bir metnin “ProductTitle” olarak kabul edilebilmesi için uzunluğunun 3 ile 256 karakter arasında olması gerekir. Bu kural tüm domain’de geçerlidir. Dolayısıyla, “ProductTitle” kullanımının olduğu her yerde tekrar tekrar validasyon yapmak yerine, bir Value Object tanımlayarak bu kuralların otomatik olarak uygulanmasını sağlarız.
+</p>
+
+#### ProductTitle Value Object Örneği
+
+Aşağıda, `ProductTitle` Value Object sınıfının C# implementasyonu yer almaktadır. Bu sınıf, product başlığının domain kurallarına uygun olmasını sağlar; başlık boş olamaz ve uzunluğu 3 ile 256 karakter arasında olmalıdır.
+
+```csharp
+public class ProductTitle 
+{
+    private static readonly int _minLength = 3;
+    private static readonly int _maxLength = 256;
+
+    public string Value { get; private set; }
+
+    public ProductTitle(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            throw new InvalidTitleException("Product title cannot be empty.");
+        
+        if (value.Length < _minLength || value.Length > _maxLength)
+            throw new InvalidTitleException($"Product title must be between {_minLength} and {_maxLength} characters.");
+
+        Value = value;
+    }
+}
+```
+
+
+## Product Application
+
+<p>
+ Application katmanında, MediatR aracılığıyla tanımlanan request/query ve bunların karşılık gelen handler sınıfları ile use case’ler yürütülmektedir. Bu use case’lerde çalışması gereken ortak operasyonlar (ör. transaction commit) IPipeline arayüzü üzerinden merkezi olarak uygulanmıştır.
+
+Tüm command’lerde, yani veritabanının state’ini değiştiren use case’lerde, yapılan değişikliklerin diğer mikroservislere iletilebilmesi için bir event publish edilmesi gerekir. Ancak veritabanı değişikliği ile event’in message broker’a gönderilmesi deterministik değildir: veritabanı değişikliği başarılı olurken event broker’a iletilemeyebilir veya tam tersi bir durum gerçekleşebilir.
+
+Bu problemi çözmek için Outbox Pattern uygulanmıştır. Event doğrudan message broker’a gönderilmek yerine, aynı transaction ile veritabanına kaydedilir. Böylece, transaction commit edildikten sonra event’in güvenli bir şekilde publish edilmesi sağlanır.
+</p>
+
+### Use Cases
+
+| Type    | Use Case                | Açıklama                          |
+|---------|------------------------|----------------------------------|
+| Command | Create Product         | Yeni ürün oluşturur              |
+| Command | Update Product         | Mevcut ürünü günceller           |
+| Command | Delete Product         | Ürünü siler                      |
+| Query   | Get Product By Id      | ID’ye göre ürün getirir          |
+| Query   | Get All Products       | Tüm ürünleri listeler            |
+| Query   | Search Products        | Ürünler üzerinde arama yapar     |
+
+Use case’ler bu şekilde ayrılarak CQRS prensibine uygun bir yapı sağlanmıştır. Command’ler state değişikliğine neden olurken, Query’ler yalnızca veri okuma işlemlerini gerçekleştirir. Aşağıda örnek olarak bir Create Product (Command) ve Get All Products (Query) use case’i gösterilmiştir.
+
+### CreateProductCommandHandler
+
+```csharp
+internal class CreateProductCommandHandler(
+    IProductRepository repository,
+    IPublishEndpoint publishEndpoint,
+    CreateProductCommandMapper mapper,
+    IProductCacheService cacheService,
+    IAuthService authService
+) : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
+{
+    public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
+    {
+        var userId = authService.UserId;
+        var title = new ProductTitle(request.Title);
+        var description = new ProductDescription(request.Description);
+        var currency = new Currency(request.Currency);
+        var price = new ProductPrice(request.Price, currency);
+        var product = new Product(userId, request.CategoryId, title, description, price);
+
+        await repository.CreateAsync(product, cancellationToken);
+
+        var @event = mapper.Map(product);
+        await publishEndpoint.Publish(@event, cancellationToken);
+
+        await cacheService.UpdateProductListVersion();
+
+        return new(product.Id);
+    }
+}
+```
+
+### UnitOfWorkPipelineBehaviour
+
+<p>
+ UnitOfWorkPipelineBehaviour, MediatR pipeline’ında Command işlemleri sırasında transaction yönetimini merkezi olarak ele alır ve işlem başarılı olduğunda commit yapar.
+</p>
+
+
+```csharp
+internal class UnitOfWorkPipelineBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork) : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+{
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    {
+        var response = await next(cancellationToken);
+        await unitOfWork.CommitAsync(cancellationToken);
+        return response;
+    }
+}
+```
+
+### GetAllProductsQueryHandler
+
+GetAllProductsQueryHandler, ürünleri öncelikle cache üzerinden almaya çalışır; eğer cache’de veri bulunamazsa veritabanına sorgu atarak sonucu elde eder. Caching hakkında daha fazla bilgi için [Product List Caching ve Cache Invalidation Stratejisi](#product-list-caching-ve-cache-invalidation-stratejisi)' ne bakınız.
+
+```csharp
+internal class GetAllProductsQueryHandler(
+    IProductRepository repository,
+    ProductQueryResponseMapper mapper,
+    IProductCacheService cacheService
+) : IRequestHandler<GetAllProductsQueryRequest, List<ProductQueryResponse>>
+{
+    public async Task<List<ProductQueryResponse>> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
+    {
+        var dtos = await cacheService.GetAsync(request.PageSize, request.Cursor);
+        if (dtos != null) return dtos;
+
+        var products = await repository.GetAllAsync(request.Cursor, request.PageSize, cancellationToken);
+        dtos = [..products.Select(mapper.Map)];
+        await cacheService.UpsertAsync(request.PageSize, request.Cursor, dtos);
+        return dtos;
+    }
+}
+```
+
+### Handler Class' ları Neden Interface (IProductCacheService, IProductRepository, IAuthService, IPublishEndpoint ...) Inject ediyor? (Dependency Inversion)
+
+Handler sınıfları (IProductCacheService, IProductRepository, IAuthService, IPublishEndpoint vb.) somut implementasyonlar yerine interface’ler üzerinden bağımlılık alır. Bu yaklaşım, Dependency Inversion Principle (DIP) gereğidir.
+
+| Kavram                    | Açıklama |
+|---------------------------|----------|
+| **Esneklik**              | Altyapı değişiklikleri (örneğin Redis yerine başka bir cache, RabbitMQ yerine farklı bir broker) handler kodunu etkilemeden değiştirilebilir. |
+| **Test Edilebilirlik**    | Interface’ler sayesinde mock veya stub implementasyonlar kolayca yazılarak unit test yapılabilir. |
+
+Bu sayede sistem daha modüler, sürdürülebilir ve genişletilebilir bir yapıya sahip olur.
+
+### Önemli Not
+Onion Architecture ile geliştirilen projede, Domain ve Application katmanları dış katmanlardan bağımsız olacak şekilde tasarlanmıştır. Bu sayede Infrastructure veya Presentation katmanlarında yapılan değişiklikler, bu katmanları doğrudan etkilemez.
+
+## Product Infrastructure
+
+Bu katman, uygulamanın dış bağımlılıklarını ve teknik implementasyonlarını içerir. Veri erişimi ve cache yönetimi altyapı işlemleri bu katmanda gerçekleştirilir.
+
+EF Core kullanılarak SQL Server üzerinden veri erişimi sağlanır.
+StackExchange.Redis ile cache işlemleri yönetilir.
+Repository implementasyonları, Application katmanında tanımlanan interface’leri uygular.
+
+Bu sayede Application ve Domain katmanları altyapı detaylarından izole edilerek daha modüler ve sürdürülebilir bir yapı elde edilir.
+
 ## API Dokümantasyonu
 
 ### Users
