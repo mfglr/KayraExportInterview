@@ -349,7 +349,50 @@ Repository implementasyonları, Application katmanında tanımlanan interface’
 
 Bu sayede Application ve Domain katmanları altyapı detaylarından izole edilerek daha modüler ve sürdürülebilir bir yapı elde edilir.
 
-## API Dokümantasyonu
+# AUTH SERVICE
+
+Auth Microservice, Product Microservice’te uygulanan temel mimari ve tasarım prensiplerini tekrar etmektedir; bu bölümde sadece Auth servisine özgü, farklı özellikler ve iş akışları üzerinde durulacaktır.
+
+| Domain Nesnesi                  | Açıklama |
+|--------------------------------|----------|
+| **UserCreatorDomainService**    | Yeni kullanıcı oluşturma işlemlerini yöneten domain servisi. |
+| **UserNameUpdaterDomainService**| Kullanıcı adını güncelleme işlemlerini yöneten domain servisi. |
+| **User**                        | Aggregate root; kullanıcıya ait tüm bilgileri kapsar. |
+| **Email**                       | Kullanıcının email bilgisi. |
+| **Password**                    | Kullanıcının şifre bilgisi. |
+| **RefreshToken**                | Kullanıcının refresh token bilgisi, oturum yönetimi için kullanılır. |
+| **UserName**                     | Kullanıcının adı bilgisi. |
+
+## Domain Service
+Domain Service’ler, aggregate’lere ait olmayan fakat domain mantığıyla ilgili iş kurallarını kapsayan operasyonları yürütür.
+
+### UserNameUpdaterDomainService
+Bir kullanıcı adı benzersiz olmalıdır; bu bir domain kuralıdır. Dolayısıyla bir kullanıcının kullanıcı adı değiştirildiğinde, aynı username’in başka bir kullanıcıda olup olmadığı kontrol edilmelidir. Bu kontrol, farklı bir User aggregate’in state’ine ihtiyaç duyar ve genellikle IUserRepository aracılığıyla gerçekleştirilir.
+
+```csharp
+public class UserNameUpdaterDomainService(IUserRepository userRepository)
+{
+    public async Task UpdateAsync(User user, UserName userName, CancellationToken cancellationToken)
+    {
+        if (await userRepository.ExistAsync(userName,cancellationToken))
+            throw new UserNameAlreadyTakeException();
+
+        user.UpdateUserName(userName);
+    }
+}
+```
+
+## Use Case
+
+| Use Case                  | Açıklama |
+|----------------------------|----------|
+| **CreateUser**             | Yeni kullanıcı oluşturur. |
+| **DeleteUser**             | Mevcut kullanıcıyı siler. |
+| **Login**                  | Kullanıcı girişi yapar ve access token üretir. |
+| **LoginByRefreshToken**    | Refresh token kullanarak yeni access token üretir. |
+| **UpdateUserName**         | Kullanıcının kullanıcı adını günceller. |
+
+# API Dokümantasyonu
 
 ### Users
 
