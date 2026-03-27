@@ -171,6 +171,10 @@
       <td>400</td>
       <td>Password must be between 6 and 256 characters.</td>
     </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -276,6 +280,10 @@
       <td>400</td>
       <td>Invalid credentials.</td>
     </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -372,6 +380,10 @@
       <td>400</td>
       <td>The refresh token is invalid or expired</td>
     </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -456,6 +468,10 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
     <tr>
       <td>401</td>
       <td>Unauthorized</td>
+    </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
     </tr>
     <tr>
       <td>500</td>
@@ -596,6 +612,10 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
       <td>400</td>
       <td>Invalid currency.</td>
     </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -723,6 +743,10 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
       <td>400</td>
       <td>Invalid currency.</td>
     </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -782,6 +806,10 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
       <td>404</td>
       <td>Product not found!</td>
     </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -827,6 +855,10 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
    <tr>
       <td>404</td>
       <td>Product not found!</td>
+    </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
     </tr>
     <tr>
       <td>500</td>
@@ -960,6 +992,10 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
     </tr>
   </thead>
   <tbody>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
     <tr>
       <td>500</td>
       <td>Sunucu hatası</td>
@@ -1052,3 +1088,151 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
     }
 ]
 </code>
+
+#### Search Products
+##### HTTP Mehtod: GET
+##### URL: /products/query/Search?key={key:string}&pageSize={page-size:int}&cursor={cursor:guid}
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametre Adı</th>
+      <th>Tipi</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+      <th>Örnek Değer</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td>key</td>
+      <td>string</td>
+      <td>Hayır</td>
+      <td>Title ve description' da aranacak kelime</td>
+      <td>Test</td>
+    </tr>
+    <tr>
+      <td>page-size</td>
+      <td>integer</td>
+      <td>Hayır</td>
+      <td>Sayfa başına getirilecek ürün sayısı. Varsayılan değeri 20 olabilir.</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <td>cursor</td>
+      <td>datetime string</td>
+      <td>Hayır</td>
+      <td>Sayfalama için kullanılacak başlangıç zamanı. Önceki cevaptaki son ürünün Timestamp’ine göre veriler çekilir.</td>
+      <td>2026-03-24T22:53:23.8699511</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Hatalar
+
+<table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+ <tbody>
+  <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body
+
+<p>
+ Aşağıdaki tabloda verilen alanlara sahip obje listesi döner.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tipi</th>
+      <th>Açıklama</th>
+      <th>Örnek Değer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>UUID / string</td>
+      <td>Ürünün benzersiz kimliği</td>
+      <td>019d2fab-a860-774c-a3c0-9ff1bc7de95b</td>
+    </tr>
+    <tr>
+      <td>createdAt</td>
+      <td>string (ISO 8601)</td>
+      <td>Ürünün oluşturulma tarihi</td>
+      <td>2026-03-27T14:21:12.1607198</td>
+    </tr>
+    <tr>
+      <td>updatedAt</td>
+      <td>string / null</td>
+      <td>Ürünün güncellenme tarihi (null ise güncellenmemiş)</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>categoryId</td>
+      <td>UUID / string</td>
+      <td>Ürünün ait olduğu kategori ID’si</td>
+      <td>79b36246-3c43-40c1-8695-13425c171850</td>
+    </tr>
+    <tr>
+      <td>title</td>
+      <td>string</td>
+      <td>Ürünün başlığı</td>
+      <td>test</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>string</td>
+      <td>Ürünün açıklaması</td>
+      <td>test test test</td>
+    </tr>
+    <tr>
+      <td>price.price</td>
+      <td>decimal</td>
+      <td>Ürünün fiyatı</td>
+      <td>0.0100</td>
+    </tr>
+    <tr>
+      <td>price.currency</td>
+      <td>string</td>
+      <td>Fiyatın para birimi</td>
+      <td>TRY</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği
+
+<code>
+ [
+    {
+        "id": "019d2fab-a860-774c-a3c0-9ff1bc7de95b",
+        "createdAt": "2026-03-27T14:21:12.1607198",
+        "updatedAt": null,
+        "categoryId": "79b36246-3c43-40c1-8695-13425c171850",
+        "title": "test",
+        "description": "test test test",
+        "price": {
+            "price": 0.0100,
+            "currency": "TRY"
+        }
+    }
+]
+</code>
+
+
