@@ -14,7 +14,7 @@
     <b>Product Mikro Servis:</b>Ürün ekleme, güncelleme ve listeleme işlemlerini gerçekleştirir. Redis Cache ile performans optimizasyonu yapılmıştır. Projede veri depolama çözümü olarak SQL Server tercih edilmiştir. Mikro servisteki loglar, Serilog ile oluşturulmakta ve RabbitMQ Sink kütüphanesi kullanılarak asenkron şekilde yayınlanmaktadır.
   </p>
   <p>
-    <b>Log Mikro Servis Ve Log Listener Worker:</b> Log Listener worker servisi, Auth ve Product mikro servislerinden gelen logları RabbitMQ aracılığıyla asenkron olarak dinler, merkezi bir şekilde toplar ve analiz edilebilir hâle getirir. Logların depolanması için Elasticsearch kullanılmaktadır. Ayrıca, Log Mikro Servis, Elasticsearch’e sorgu gönderen endpointler sağlayarak logların görüntülenmesini mümkün kılar.
+    <b>Log Mikro Servis Ve Log Listener Worker:</b> Log Listener worker servisi, Auth, Gateway ve Product mikro servislerinden gelen logları RabbitMQ aracılığıyla asenkron olarak dinler, merkezi bir şekilde toplar ve analiz edilebilir hâle getirir. Logların depolanması için Elasticsearch kullanılmaktadır. Ayrıca, Log Mikro Servis, Elasticsearch’e sorgu gönderen endpointler sağlayarak logların görüntülenmesini mümkün kılar.
   </p>
 </p>
 <p>
