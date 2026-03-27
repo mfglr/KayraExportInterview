@@ -537,12 +537,13 @@ public class User : IdentityUser
 </table>
 
 ##### Request Body Örneği
-<code>
+
+```json
 {
  "email": "aliveli@example.com",
  "password": "123456"
 }
-</code>
+```
 
  ##### Hatalar
 
@@ -609,7 +610,7 @@ public class User : IdentityUser
   </tbody>
 </table>
 
-<code>
+```json
 {
     "id": "7a508887-758b-4533-a1c7-e479c2e0d832",
     "token": {
@@ -617,7 +618,73 @@ public class User : IdentityUser
         "refreshToken": "1162841d-5832-43f2-b16e-0fdc0ee2c0cb"
     }
 }
-</code>
+```
+
+#### Update User Name
+##### HTTP Mehtod: PUT
+##### URL: /users/updateUserName
+##### Request Body
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>userName</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Kullanıcının e-posta adresi</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği
+
+```json
+{
+ "userName": "mfgglr"
+}
+```
+
+ ##### Hatalar
+
+ <table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>404</td>
+      <td>User not found!!</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>Invalid credentials.</td>
+    </tr>
+    <tr>
+      <td>401</td>
+      <td>Unauthorized</td>
+    </tr>
+   <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
 
 #### Login
 ##### HTTP Mehtod: POST
@@ -650,13 +717,13 @@ public class User : IdentityUser
 </table>
 
 ##### Request Body Örneği
-<code>
+
+```json
 {
  "key": "aliveli@example.com",
  "password": "123456"
 }
-</code>
-
+```
  ##### Hatalar
 
  <table>
@@ -712,12 +779,12 @@ public class User : IdentityUser
   </tbody>
 </table>
 
-<code>
+```json
 {
     "accessToken": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MTcwMzkxYS01YjE4LTQ1YTktOGE5Yi00MmE3N2YyYzUyZjMiLCJhdWQiOlsiZ2F0ZXdheS5hcGkiLCJwcm9kdWN0LmFwaSIsInVzZXIuYXBpIl0sImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiN2E1MDg4ODctNzU4Yi00NTMzLWExYzctZTQ3OWMyZTBkODMyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTc3NDYxNjc3MCwiZXhwIjoxNzc0NjE3NjcwLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZpY2UuYXBpIn0.veZr1xOyqQo6lFviQlsRmJ52dgq8ma7HAKRcFzBcC5A",
     "refreshToken": "9f65ff34-6cf3-4a05-8a7a-06f0e0414b52"
 }
-</code>
+```
 
 #### Login By Refresh Token
 ##### HTTP Mehtod: POST
@@ -750,12 +817,13 @@ public class User : IdentityUser
 </table>
 
 ##### Request Body Örneği
-<code>
+
+```json
 {
  "id": "7a508887-758b-4533-a1c7-e479c2e0d832",
  "token": "1162841d-5832-43f2-b16e-0fdc0ee2c0cb"
 }
-</code>
+```
 
  ##### Hatalar
 
@@ -812,12 +880,12 @@ public class User : IdentityUser
   </tbody>
 </table>
 
-<code>
+```json
 {
     "accessToken": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MTcwMzkxYS01YjE4LTQ1YTktOGE5Yi00MmE3N2YyYzUyZjMiLCJhdWQiOlsiZ2F0ZXdheS5hcGkiLCJwcm9kdWN0LmFwaSIsInVzZXIuYXBpIl0sImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiN2E1MDg4ODctNzU4Yi00NTMzLWExYzctZTQ3OWMyZTBkODMyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTc3NDYxNjc3MCwiZXhwIjoxNzc0NjE3NjcwLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZpY2UuYXBpIn0.veZr1xOyqQo6lFviQlsRmJ52dgq8ma7HAKRcFzBcC5A",
     "refreshToken": "9f65ff34-6cf3-4a05-8a7a-06f0e0414b52"
 }
-</code>
+```
 
 #### Delete User
 ##### HTTP Mehtod: DELETE
@@ -963,7 +1031,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
 
 ##### Request Body Örneği:
 
-<code>
+```json
 {
     "categoryId": "79b36246-3c43-40c1-8695-13425c171850",
     "title": "test",
@@ -971,7 +1039,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
     "price": "15",
     "Currency": "TRY"
 }
-</code>
+```
 
 ##### Hatalar
 
@@ -1095,14 +1163,14 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
 
 ##### Request Body Örneği:
 
-<code>
+```json
 {
     "title": "test",
     "description": "test test test",
     "price": "15",
     "Currency": "TRY"
 }
-</code>
+```
 
 ##### Hatalar
 
@@ -1329,7 +1397,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
 
 ##### Request Body Örneği
 
-<code>
+```json
  {
     "id": "019d2fab-a860-774c-a3c0-9ff1bc7de95b",
     "createdAt": "2026-03-27T14:21:12.1607198Z",
@@ -1342,7 +1410,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
         "currency": "TRY"
     }
 }
-</code>
+```
 
 
 #### Get All Products
@@ -1467,7 +1535,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
 
 ##### Request Body Örneği
 
-<code>
+```json
  [
     {
         "id": "019d2fab-a860-774c-a3c0-9ff1bc7de95b",
@@ -1482,7 +1550,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
         }
     }
 ]
-</code>
+```
 
 #### Search Products
 ##### HTTP Mehtod: GET
@@ -1613,7 +1681,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
 
 ##### Request Body Örneği
 
-<code>
+```json
  [
     {
         "id": "019d2fab-a860-774c-a3c0-9ff1bc7de95b",
@@ -1628,6 +1696,75 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
         }
     }
 ]
-</code>
+```
+
+### Logs
+
+#### Search Products
+##### HTTP Mehtod: GET
+##### URL: /logs/query/search?key={key:string}&serviceName={service-name:string}&level={level:string}&traceId={traceId:string}&page={page:int}&pageSize={page-size:int}
 
 
+| Parametre    | Açıklama                                     | Örnek Değer                                     |
+|--------------|----------------------------------------------|-----------------------------------              |
+| key          | Log sorgulama anahtarı                       | string                                          |
+| serviceName  | Logların ait olduğu servis adı               | 'AuthService.Api', 'Gateway.Api', 'Product.Api' |
+| level        | Log seviyesi                                 | 'Warning', 'Information', 'Error'               |
+| traceId      | İlgili isteğe ait izleme (trace) ID’si       | string                                          |
+| page         | Sayfa numarası (paginasyon)                  | number                                          |
+| pageSize     | Her sayfadaki kayıt sayısı                   | number                                          |
+
+
+##### Hatalar
+
+<table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+ <tbody>
+  <tr>
+      <td>429</td>
+      <td>Rate limit exceeded</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body
+
+<p>
+ Aşağıdaki tabloda verilen alanlara sahip obje listesi döner.
+</p>
+
+| Alan              | Açıklama                                                                                       | Örnek Değer                                                                 |
+|------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `serviceName`     | Log kaydının ait olduğu servis adı                                                              | `"AuthService.Api"`                                                        |
+| `timeStamp`       | Log kaydının oluştuğu tarih ve saat                                                            | `"2026-03-27T20:41:49.8636608+03:00"`                                     |
+| `level`           | Log seviyesi (Information, Warning, Error, vb.)                                               | `"Information"`                                                            |
+| `messageTemplate` | Log mesajının şablonu ve detayları                                                            | `"Request starting {Protocol} {Method} {Scheme}://{Host}{PathBase}{Path}{QueryString} - {ContentType} {ContentLength}"` |
+| `traceId`         | İlgili isteğe ait izleme (trace) ID’si                                                        | `"3c120fd3df1cf63bf0fc3461f416851a"`                                      |
+| `requestPaths`    | İstek yapılan endpoint’in path segmentleri                                                   | `["api", "users", "create"]`                                              |
+| `exception`       | Eğer log bir hata içeriyorsa exception detayları, aksi takdirde `null`                        | `null`                                                                     |
+
+##### Request Body Örneği
+```json
+{
+        "serviceName": "AuthService.Api",
+        "timeStamp": "2026-03-27T20:41:49.8636608+03:00",
+        "level": "Information",
+        "messageTemplate": "Request starting {Protocol} {Method} {Scheme}://{Host}{PathBase}{Path}{QueryString} - {ContentType} {ContentLength}",
+        "traceId": "3c120fd3df1cf63bf0fc3461f416851a",
+        "requestPaths": [
+            "api",
+            "users",
+            "create"
+        ],
+        "exception": null
+    },
+```
