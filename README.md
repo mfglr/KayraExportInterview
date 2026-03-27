@@ -109,12 +109,12 @@
 
 ## API Dokümantasyonu
 
-### 1) Users
+### Users
 
-#### 1-1) Create: 
+#### Create User
 ##### HTTP Mehtod: POST
 ##### URL: /users/create
-##### Request Body:
+##### Request Body
 
 <table>
   <thead>
@@ -141,7 +141,7 @@
   </tbody>
 </table>
 
-##### Request Body Örneği:
+##### Request Body Örneği
 <code>
 {
  "email": "aliveli@example.com",
@@ -220,10 +220,10 @@
 }
 </code>
 
-#### 1-2) Login: 
+#### Login
 ##### HTTP Mehtod: POST
 ##### URL: /users/login
-##### Request Body:
+##### Request Body
 
 <table>
   <thead>
@@ -250,7 +250,7 @@
   </tbody>
 </table>
 
-##### Request Body Örneği:
+##### Request Body Örneği
 <code>
 {
  "key": "aliveli@example.com",
@@ -316,10 +316,10 @@
 }
 </code>
 
-#### 1-3) Login By Refresh Token: 
+#### Login By Refresh Token
 ##### HTTP Mehtod: POST
 ##### URL: /users/loginByRefreshToken
-##### Request Body:
+##### Request Body
 
 <table>
   <thead>
@@ -346,7 +346,7 @@
   </tbody>
 </table>
 
-##### Request Body Örneği:
+##### Request Body Örneği
 <code>
 {
  "id": "7a508887-758b-4533-a1c7-e479c2e0d832",
@@ -412,10 +412,12 @@
 }
 </code>
 
-#### 1-3) Delete User: 
+#### Delete User
 ##### HTTP Mehtod: DELETE
 ##### URL: /users/delete
-##### Request Header:
+##### Request Header
+
+Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir. Eğer kayıtlı bir kullanıcıysanız token almak için [login by refresh token](#login-by-refresh-token) ya da [login](#login) endpoint i kullanın. Yeni bir kullanıcı oluşturmak için [create user](#create-user) endpoint' ini kullanın.
 
 <table>
   <thead>
@@ -463,12 +465,14 @@
 </table>
 
 
-### 2) Products
+### Products
 
-#### 2-1) Create Product: 
+#### Create Product
 ##### HTTP Mehtod: POST
 ##### URL: /products/create
-##### Request Header: Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir.
+##### Request Header
+
+Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir. Eğer kayıtlı bir kullanıcıysanız token almak için [login by refresh token](#login-by-refresh-token) ya da [login](#login) endpoint i kullanın. Yeni bir kullanıcı oluşturmak için [create user](#create-user) endpoint' ini kullanın.
 
 <table>
   <thead>
@@ -489,7 +493,7 @@
   </tbody>
 </table>
 
-##### Request Body:
+##### Request Body
 
 <table>
   <thead>
@@ -599,10 +603,12 @@
   </tbody>
 </table>
 
-#### 2-2) Update Product: 
+#### Update Product
 ##### HTTP Mehtod: PUT
 ##### URL: /products/update
 ##### Request Header: Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir.
+
+Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir. Eğer kayıtlı bir kullanıcıysanız token almak için [login by refresh token](#login-by-refresh-token) ya da [login](#login) endpoint i kullanın. Yeni bir kullanıcı oluşturmak için [create user](#create-user) endpoint' ini kullanın.
 
 <table>
   <thead>
@@ -716,6 +722,63 @@
    <tr>
       <td>400</td>
       <td>Invalid currency.</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Update Delete
+##### HTTP Mehtod: DELETE
+##### URL: /products/delete/{product-id}
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametre Adı</th>
+      <th>Tipi</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+      <th>Örnek Değer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>product-id</td>
+      <td>UUID / string</td>
+      <td>Evet</td>
+      <td>Silinecek ürünün benzersiz kimliği (ID)</td>
+      <td>79b36246-3c43-40c1-8695-13425c171850</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Header: Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir.
+
+Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir. Eğer kayıtlı bir kullanıcıysanız token almak için [login by refresh token](#login-by-refresh-token) ya da [login](#login) endpoint i kullanın. Yeni bir kullanıcı oluşturmak için [create user](#create-user) endpoint' ini kullanın.
+
+<table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>401</td>
+      <td>Unauthorized</td>
+    </tr>
+   <tr>
+      <td>403</td>
+      <td>Forbidden</td>
+    </tr>
+   <tr>
+      <td>404</td>
+      <td>Product not found!</td>
     </tr>
     <tr>
       <td>500</td>
