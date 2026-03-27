@@ -98,7 +98,7 @@
 
 <b>Proje dizinine gir</b>
 ```cmd
-cd KayraExportInterview</code>
+cd KayraExportInterview
 ```
 
 <b>Prod branch'ini indir ve geçiş yap</b>
