@@ -169,6 +169,10 @@ services:
       - ReverseProxy:Clusters:user.cluster:Destinations:destination:Address=${AUTH_SERVICE}
       - ReverseProxy:Clusters:product.cluster:Destinations:destination:Address=${PRODUCT_SERVICE}
       - ReverseProxy:Clusters:log.cluster:Destinations:destination:Address=${LOG_SERVICE}
+
+      - RateLimit:PermitLimit=${RATE_LIMIT_PERMIT_LIMIT}
+      - RateLimit:Window=${RATE_LIMIT_WINDOW}
+      - RateLimit:QueueLimit=${RATE_LIMIT_QUEUE_LIMIT}
     ports:
       - "5001:80"
     depends_on:
