@@ -87,13 +87,13 @@
   
 ## Kurulum
 
-### 1️⃣ Repoyu klonla
+##### Repoyu klonla
 <code>git clone https://github.com/mfglr/KayraExportInterview.git</code>
 
-### 2️⃣ Proje dizinine gir
+##### Proje dizinine gir
 <code>cd KayraExportInterview</code>
 
-### 3️⃣ Prod branch'ini indir ve geçiş yap
+##### Prod branch'ini indir ve geçiş yap
 <p>
   <code>git fetch origin</code>
 </p>
@@ -101,8 +101,363 @@
   <code>git checkout -b prod/v1.0.0 origin/prod/v1.0.0</code>
 </p>
 
-### 4️⃣ Docker Compose ile build ve çalıştır (arka planda)
+##### Docker Compose ile build ve çalıştır (arka planda)
 <code>docker-compose up --build -d</code>
 
-### 5️⃣ Servis loglarını takip etmek istersen
+##### Servis loglarını takip etmek istersen
 <code>docker-compose logs -f</code>
+
+## API Dokümantasyonu
+
+### 1) Users
+
+#### 1-1) Create: 
+##### HTTP Mehtod: POST
+##### URL: /users/create
+##### Request Body:
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>email</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Kullanıcının e-posta adresi</td>
+    </tr>
+    <tr>
+      <td>password</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Kullanıcının şifresi</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği:
+<code>
+{
+ "email": "aliveli@example.com",
+ "password": "123456"
+}
+</code>
+
+ ##### Hatalar
+
+ <table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>400</td>
+      <td>Email is not valid!</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>Email has been already taken!</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>Password must be between 6 and 256 characters.</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Response Body
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string (UUID)</td>
+      <td>Kullanıcının benzersiz kimliği</td>
+      <td>7a508887-758b-4533-a1c7-e479c2e0d832</td>
+    </tr>
+    <tr>
+      <td>token.accessToken</td>
+      <td>string (JWT)</td>
+      <td>Kullanıcının kimlik doğrulaması için kullanılan geçerli JWT token</td>
+      <td>eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9...</td>
+    </tr>
+    <tr>
+      <td>token.refreshToken</td>
+      <td>string (UUID)</td>
+      <td>Access token süresi dolduğunda yeni token almak için kullanılan refresh token</td>
+      <td>1162841d-5832-43f2-b16e-0fdc0ee2c0cb</td>
+    </tr>
+  </tbody>
+</table>
+
+<code>
+{
+    "id": "7a508887-758b-4533-a1c7-e479c2e0d832",
+    "token": {
+        "accessToken": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzNTdkNTBlNS0wZmUxLTRjYzAtODYzNC03NTFkZGU2ZGJjYjEiLCJhdWQiOlsiZ2F0ZXdheS5hcGkiLCJwcm9kdWN0LmFwaSIsInVzZXIuYXBpIl0sImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiN2E1MDg4ODctNzU4Yi00NTMzLWExYzctZTQ3OWMyZTBkODMyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTc3NDYxNjI3NSwiZXhwIjoxNzc0NjE3MTc1LCJpc3MiOiJodHRwOi8vYXV0aHNlcnZpY2UuYXBpIn0.slVrSJRZU1ZmGYsKx7gTUSilm2CFEofeKGjmdktDBnY",
+        "refreshToken": "1162841d-5832-43f2-b16e-0fdc0ee2c0cb"
+    }
+}
+</code>
+
+#### 1-2) Login: 
+##### HTTP Mehtod: POST
+##### URL: /users/login
+##### Request Body:
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>key</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Kullanıcının e-posta adresi veya kullanıcı adı</td>
+    </tr>
+    <tr>
+      <td>password</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Kullanıcının şifresi</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği:
+<code>
+{
+ "key": "aliveli@example.com",
+ "password": "123456"
+}
+</code>
+
+ ##### Hatalar
+
+ <table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>404</td>
+      <td>User not found!!</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>Invalid credentials.</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Response Body
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>accessToken</td>
+      <td>string (JWT)</td>
+      <td>Kullanıcının yetkilendirilmiş istek yapabilmesi için kullanılan geçerli JWT token</td>
+      <td>eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9...</td>
+    </tr>
+    <tr>
+      <td>refreshToken</td>
+      <td>string (UUID)</td>
+      <td>Access token süresi dolduğunda yeni token almak için kullanılan refresh token</td>
+      <td>9f65ff34-6cf3-4a05-8a7a-06f0e0414b52</td>
+    </tr>
+  </tbody>
+</table>
+
+<code>
+{
+    "accessToken": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MTcwMzkxYS01YjE4LTQ1YTktOGE5Yi00MmE3N2YyYzUyZjMiLCJhdWQiOlsiZ2F0ZXdheS5hcGkiLCJwcm9kdWN0LmFwaSIsInVzZXIuYXBpIl0sImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiN2E1MDg4ODctNzU4Yi00NTMzLWExYzctZTQ3OWMyZTBkODMyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTc3NDYxNjc3MCwiZXhwIjoxNzc0NjE3NjcwLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZpY2UuYXBpIn0.veZr1xOyqQo6lFviQlsRmJ52dgq8ma7HAKRcFzBcC5A",
+    "refreshToken": "9f65ff34-6cf3-4a05-8a7a-06f0e0414b52"
+}
+</code>
+
+#### 1-3) Login By Refresh Token: 
+##### HTTP Mehtod: POST
+##### URL: /users/loginByRefreshToken
+##### Request Body:
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string (UUID)</td>
+      <td>Kullanıcının benzersiz kimliği</td>
+      <td>7a508887-758b-4533-a1c7-e479c2e0d832</td>
+    </tr>
+    <tr>
+      <td>token</td>
+      <td>string (UUID)</td>
+      <td>Yeni access token almak için kullanılan refresh token</td>
+      <td>1162841d-5832-43f2-b16e-0fdc0ee2c0cb</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği:
+<code>
+{
+ "id": "7a508887-758b-4533-a1c7-e479c2e0d832",
+ "token": "1162841d-5832-43f2-b16e-0fdc0ee2c0cb"
+}
+</code>
+
+ ##### Hatalar
+
+ <table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>404</td>
+      <td>User not found!!</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>The refresh token is invalid or expired</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Response Body
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>accessToken</td>
+      <td>string (JWT)</td>
+      <td>Kullanıcının yetkilendirilmiş istek yapabilmesi için kullanılan geçerli JWT token</td>
+      <td>eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9...</td>
+    </tr>
+    <tr>
+      <td>refreshToken</td>
+      <td>string (UUID)</td>
+      <td>Access token süresi dolduğunda yeni token almak için kullanılan refresh token</td>
+      <td>9f65ff34-6cf3-4a05-8a7a-06f0e0414b52</td>
+    </tr>
+  </tbody>
+</table>
+
+<code>
+{
+    "accessToken": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4MTcwMzkxYS01YjE4LTQ1YTktOGE5Yi00MmE3N2YyYzUyZjMiLCJhdWQiOlsiZ2F0ZXdheS5hcGkiLCJwcm9kdWN0LmFwaSIsInVzZXIuYXBpIl0sImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiN2E1MDg4ODctNzU4Yi00NTMzLWExYzctZTQ3OWMyZTBkODMyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTc3NDYxNjc3MCwiZXhwIjoxNzc0NjE3NjcwLCJpc3MiOiJodHRwOi8vYXV0aHNlcnZpY2UuYXBpIn0.veZr1xOyqQo6lFviQlsRmJ52dgq8ma7HAKRcFzBcC5A",
+    "refreshToken": "9f65ff34-6cf3-4a05-8a7a-06f0e0414b52"
+}
+</code>
+
+#### 1-3) Delete User: 
+##### HTTP Mehtod: DELETE
+##### URL: /users/delete
+##### Request Header:
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Authorization</td>
+      <td>Evet</td>
+      <td>JWT access token, "Bearer " öneki ile gönderilmeli</td>
+      <td>Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</td>
+    </tr>
+  </tbody>
+</table>
+
+
+##### Hatalar
+
+ <table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>404</td>
+      <td>User not found!!</td>
+    </tr>
+    <tr>
+      <td>401</td>
+      <td>Unauthorized</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
