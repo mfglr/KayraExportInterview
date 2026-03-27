@@ -1,11 +1,14 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using LogService.Domain;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LogService.Infractructure.ElasticSearch
 {
     public static class MappingConfigurator
     {
-        public static async Task ConfigureAsync(ElasticsearchClient client) {
+        public static async Task ConfigureAsync(IServiceProvider serviceProvider) {
+            using var scope = serviceProvider.CreateScope();
+            var client = scope.ServiceProvider.GetRequiredService<ElasticsearchClient>();
 
             var response = await client.PingAsync();
             while (!response.IsSuccess())

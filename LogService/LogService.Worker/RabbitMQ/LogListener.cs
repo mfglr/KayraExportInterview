@@ -1,4 +1,3 @@
-using Elastic.Clients.Elasticsearch;
 using LogService.Application.Commands.CreateLog;
 using LogService.Infractructure.ElasticSearch;
 using MediatR;
@@ -9,13 +8,13 @@ using System.Text.Json;
 
 namespace LogService.Worker.RabbitMQ
 {
-    internal class LogListener(RabbitMQOptions options, IServiceProvider serviceProvider, ElasticsearchClient client) : BackgroundService
+    internal class LogListener(RabbitMQOptions options, IServiceProvider serviceProvider) : BackgroundService
     {
         private readonly static string _queueName = "LogListener";
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await MappingConfigurator.ConfigureAsync(client);
+            await MappingConfigurator.ConfigureAsync(serviceProvider);
 
             while (!stoppingToken.IsCancellationRequested)
             {
