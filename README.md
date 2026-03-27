@@ -463,7 +463,8 @@
 </table>
 
 
-### 2) Product
+### 2) Products
+
 #### 2-1) Create Product: 
 ##### HTTP Mehtod: POST
 ##### URL: /products/create
@@ -550,6 +551,131 @@
 <code>
 {
     "categoryId": "79b36246-3c43-40c1-8695-13425c171850",
+    "title": "test",
+    "description": "test test test",
+    "price": "15",
+    "Currency": "TRY"
+}
+</code>
+
+##### Hatalar
+
+<table>
+  <thead>
+    <tr>
+      <th>Kod</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>401</td>
+      <td>Unauthorized</td>
+    </tr>
+   <tr>
+      <td>403</td>
+      <td>Forbidden</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>Product title must be between 3 and 256 characters.</td>
+    </tr>
+   <tr>
+      <td>400</td>
+      <td>Product description must be between 10 and 2000 characters.</td>
+    </tr>
+   <tr>
+      <td>400</td>
+      <td>Price must be greater than zero.</td>
+    </tr>
+   <tr>
+      <td>400</td>
+      <td>Invalid currency.</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Sunucu hatası</td>
+    </tr>
+  </tbody>
+</table>
+
+#### 2-2) Update Product: 
+##### HTTP Mehtod: PUT
+##### URL: /products/update
+##### Request Header: Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidir.
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Authorization</td>
+      <td>Evet</td>
+      <td>JWT access token, "Bearer " öneki ile gönderilmeli</td>
+      <td>Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body:
+
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tür</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+      <th>Örnek</th>
+      <th>Alabileceği Değerler</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>title</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Ürünün başlığı veya adı</td>
+      <td>test</td>
+      <td>Minimum 3 karakter, maksimum 256 karakter</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>string</td>
+      <td>Hayır</td>
+      <td>Ürün açıklaması</td>
+      <td>test test test</td>
+      <td>Minimum 10, maksimum 2000 karakter</td>
+    </tr>
+    <tr>
+      <td>price</td>
+      <td>decimal</td>
+      <td>Evet</td>
+      <td>Ürünün fiyatı</td>
+      <td>15</td>
+      <td>> 0</td>
+    </tr>
+    <tr>
+      <td>Currency</td>
+      <td>string</td>
+      <td>Evet</td>
+      <td>Fiyatın para birimi</td>
+      <td>TRY</td>
+      <td>TRY, USD, EUR</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği:
+
+<code>
+{
     "title": "test",
     "description": "test test test",
     "price": "15",
