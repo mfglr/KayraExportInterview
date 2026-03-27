@@ -165,6 +165,10 @@ MediatR, Mediator Patterni uygulayan ve C# ekosisteminde yaygın kullanılan bir
  Outbox Pattern kullanılmazsa, bir servis siparişi kaydederken diğer servislere event’leri gönderilemeyebilir ve veri tutarsızlığı oluşabilir; Outbox Pattern ile sipariş kaydı ve event publish aynı transaction içinde güvenli şekilde yönetilir.
 </p>
 
+<p>
+ Outbox patternini MassTransit kütüphanesi aracılığıyla uyguluyorum.
+</p>
+
 ## API Dokümantasyonu
 
 ### Users
