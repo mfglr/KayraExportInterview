@@ -3,8 +3,8 @@
 namespace ProductService.Application.Queries.SearchProduct
 {
     public record SearchProductQueryRequest(
-        string Key,
+        string? Key,
         DateTime? Cursor,
-        int PageSize
+        int PageSize = 20
     ) : IRequest<List<ProductQueryResponse>>;
 }

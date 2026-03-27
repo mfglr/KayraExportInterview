@@ -2,5 +2,5 @@
 
 namespace LogService.Application.Queries.GetLogsByLevel
 {
-    public record GetLogsByLevelQueryRequest(string Level, int Page, int PageSize) : IRequest<List<LogResponse>>;
+    public record GetLogsByLevelQueryRequest(string Level, int Page, int PageSize = 20) : IRequest<List<LogResponse>>;
 }

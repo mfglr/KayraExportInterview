@@ -18,12 +18,13 @@ namespace ProductService.Infrastructure.EfCore
         public Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
             context.Products.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        public Task<List<Product>> SearchAsync(string key, DateTime? cursor, int pageSize, CancellationToken cancellationToken = default) =>
+        public Task<List<Product>> SearchAsync(string? key, DateTime? cursor, int pageSize, CancellationToken cancellationToken = default) =>
             context.Products
                 .AsNoTracking()
                 .Where(
                     x =>
                         (
+                            key == null ||
                             x.Title.Value.ToLower().Contains(key.ToLower()) || 
                             x.Description.Value.ToLower().Contains(key.ToLower())
                         ) &&

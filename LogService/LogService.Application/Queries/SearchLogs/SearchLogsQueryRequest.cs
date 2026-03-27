@@ -8,6 +8,6 @@ namespace LogService.Application.Queries.SearchLogs
         string? Level,
         string? Key,
         int Page,
-        int PageSize
+        int PageSize = 20
     ) : IRequest<List<LogResponse>>;
 }
