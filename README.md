@@ -112,49 +112,6 @@ git checkout -b prod/v1.0.0 origin/prod/v1.0.0
 docker-compose up --build -d
 ```
 
-## Product List Caching ve Cache Invalidation Stratejisi
-
-Bu projede ürün listeleme [Get All Products](#get-all-products) endpoint’i için Redis tabanlı cache mekanizması uygulanmıştır. Cache invalidation problemi, versioning (versiyonlama) yaklaşımı ile çözülmüştür.
-
- ### Amaç
-  - Sık kullanılan ürün listeleme sorgularını cache’lemek</ol>
-  - Veritabanı yükünü azaltmak</ol>
-  - Tutarlı (stale olmayan) veri sunmak</ol>
-
-### Strateji: Version-Based Cache Invalidation
-<p>
- Ürün listeleri cache’lenirken her cache key, global bir liste versiyonu ile birlikte oluşturulur.
-</p>
-
-<code>list:{pageSize}:{cursor}:{ProductListVersionKey}</code>
-
-### Cache Invalidation Mekanizması
-<p>
- Aşağıdaki durumlarda cache manuel silinmez, bunun yerine versiyon artırılır:
- <ul>
-  <li>Yeni ürün eklenmesi</li>
-  <li>Ürün güncellenmesi</li>
-  <li>Ürün silinmesi</li>
-</ul>
-</p>
-
-<code>Increase(ProductListVersionKey)</code>
-
-<p>
- Bu işlem, eski cache key’leri geçersiz hale getirir ve yeni isteklerde farklı bir version ile yeni cache oluşturulur.
-</p>
-
-### Liste Çekme
-
-<p>
- Önce Redis’ten mevcut ProductListVersionKey alınır. Daha sonra bu version ile page okunur. Page varsa gönderilir yoksa veritabanından okunur.
-</p>
-
-### Trade-Off
-<p>
- Eski cache verileri Redis’te kalmaya devam eder (memory trade-off). TTL eklenerek bu problem minimize edilebilir ya da clean-up worker yazılabilir.
-</p>
-
 ## Neden MediatR?
 
 MediatR, Mediator Patterni uygulayan ve C# ekosisteminde yaygın kullanılan bir kütüphanedir. Nesneler arasındaki direct bağımlılıkları azaltır, işlemleri Command/Query/Notification olarak merkezi bir handler üzerinden yönetmeyi sağlar. Böylece kod daha modüler, test edilebilir ve okunabilir hâle gelir. Ayrıca pipeline desteği sayesinde logging, validation, transaction ve caching gibi ortak süreçler tek bir noktadan yönetilebilir.
@@ -349,6 +306,69 @@ StackExchange.Redis ile cache işlemleri yönetilir.
 Repository implementasyonları, Application katmanında tanımlanan interface’leri uygular.
 
 Bu sayede Application ve Domain katmanları altyapı detaylarından izole edilerek daha modüler ve sürdürülebilir bir yapı elde edilir.
+
+### Product List Caching ve Cache Invalidation Stratejisi
+
+Bu projede ürün listeleme [Get All Products](#get-all-products) endpoint’i için Redis tabanlı cache mekanizması uygulanmıştır. Cache invalidation problemi, versioning (versiyonlama) yaklaşımı ile çözülmüştür.
+
+ #### Amaç
+  - Sık kullanılan ürün listeleme sorgularını cache’lemek</ol>
+  - Veritabanı yükünü azaltmak</ol>
+  - Tutarlı (stale olmayan) veri sunmak</ol>
+
+#### Strateji: Version-Based Cache Invalidation
+<p>
+ Ürün listeleri cache’lenirken her cache key, global bir liste versiyonu ile birlikte oluşturulur.
+</p>
+
+<code>list:{pageSize}:{cursor}:{ProductListVersionKey}</code>
+
+#### Cache Invalidation Mekanizması
+<p>
+ Aşağıdaki durumlarda cache manuel silinmez, bunun yerine versiyon artırılır:
+ <ul>
+  <li>Yeni ürün eklenmesi</li>
+  <li>Ürün güncellenmesi</li>
+  <li>Ürün silinmesi</li>
+</ul>
+</p>
+
+```csharp
+ public Task UpdateProductListVersion() => database.StringIncrementAsync(_productListVersionKey, 1);
+```
+
+<p>
+ Bu işlem, eski cache key’leri geçersiz hale getirir ve yeni isteklerde farklı bir version ile yeni cache oluşturulur.
+</p>
+
+#### Liste Çekme
+
+<p>
+ Önce Redis’ten mevcut ProductListVersionKey alınır. Daha sonra bu version ile page okunur. Page varsa gönderilir yoksa veritabanından okunur.
+</p>
+
+```csharp
+
+ private async Task<long> GetProductListVersion()
+ {
+     var result = await database.StringGetAsync(_productListVersionKey);
+     return result.HasValue ? (long)result : 0;
+ }
+
+ public async Task<List<ProductQueryResponse>?> GetAsync(int pageSize, DateTime? cursor)
+ {
+     var version = await GetProductListVersion();
+     var id = Id(cursor, pageSize,version);
+     var json = await database.StringGetAsync(id);
+     return json.IsNullOrEmpty ? null : JsonSerializer.Deserialize<List<ProductQueryResponse>>(json.ToString());
+ }
+```
+
+#### Trade-Off
+<p>
+ Eski cache verileri Redis’te kalmaya devam eder (memory trade-off). TTL eklenerek bu problem minimize edilebilir ya da clean-up worker yazılabilir.
+</p>
+
 
 # AUTH SERVICE
 
