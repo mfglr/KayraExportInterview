@@ -150,6 +150,10 @@ Bu projede ürün listeleme [Get All Products](#get-all-products) endpoint’i i
  Eski cache verileri Redis’te kalmaya devam eder (memory trade-off). TTL eklenerek bu problem minimize edilebilir ya da clean-up worker yazılabilir.
 </p>
 
+## Neden MediatR?
+
+MediatR, Mediator Patterni uygulayan ve C# ekosisteminde yaygın kullanılan bir kütüphanedir. Nesneler arasındaki direct bağımlılıkları azaltır, işlemleri Command/Query/Notification olarak merkezi bir handler üzerinden yönetmeyi sağlar. Böylece kod daha modüler, test edilebilir ve okunabilir hâle gelir. Ayrıca pipeline desteği sayesinde logging, validation, transaction ve caching gibi ortak süreçler tek bir noktadan yönetilebilir.
+
 ## Outbox Pattern
 ### Outbox Pattern Nedir?
 <p>
