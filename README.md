@@ -84,6 +84,10 @@
 <p>
   <b>DDD(Domain Driven Design):</b> İş problemlerini yazılım modeline doğru ve sürdürülebilir bir şekilde yansıtmak amacıyla uygulandı; domain odaklı tasarım sayesinde, business logic domain katmanında yoğunlaştırıldı, aggregate’ler ile tutarlılık sağlandı, repository ve service yapıları ile uygulama katmanları arasında loose coupling oluşturuldu.
 </p>
+
+<p>
+ <b>Onion Architecture</b>: Onion Architecture, uygulamanın domain (iş mantığı) katmanını merkeze alarak, tüm dış bağımlılıkları çevreleyen katmanlarla izole eden bir mimari yaklaşımdır. Bu sayede domain bağımsız kalır, test edilebilirlik artar ve altyapı veya UI değişiklikleri domain’i etkilemez. Katmanlar içten dışa doğru genellikle Domain, Application, Infrastructure, Presentation şeklinde organize edilir.
+</p>
   
 ## Kurulum
 
