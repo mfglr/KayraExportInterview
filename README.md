@@ -440,6 +440,68 @@ internal class AccessTokenGenerator(ITokenOptions tokenOptions, UserManager<User
 }
 ```
 
+### Refresh Token Yönetimi
+
+Uygulamada **Refresh Token** mekanizması, kullanıcıların uzun süreli oturumlarını güvenli bir şekilde yönetmek için kullanılır. Her `User` entity’si oluşturulduğunda veya giriş yaptığında, belirli bir süre geçerliliğe sahip **yeni bir Refresh Token** üretilir.
+
+- **Benzersiz ve güvenli:** Refresh Token, **GUID** olarak oluşturulur ve **SHA256 ile hash’lenerek** veritabanında saklanır.
+- **Geçerlilik kontrolü:** Token’ın süresi `ExpiredAt` ile takip edilir; süresi dolmuş token’lar geçersiz sayılır.
+- **Doğrulama:** Kullanıcı token ile oturum açmaya çalıştığında, token `IsValid` metodu ile doğrulanır ve sadece geçerli, eşleşen token’lar kabul edilir.
+- **Tek token politikası:** Yeni bir giriş veya token yenileme işleminde, önceki token’lar temizlenir ve yerine **yeni bir token** eklenir.
+
+Bu yaklaşım, hem **güvenli** hem de **stateless authentication** ile uyumlu bir oturum yönetimi sağlar; token’lar kullanıcıya verilmeden önce hashlenir ve yalnızca hash veritabanında saklanır.
+
+```csharp
+public class RefreshToken
+{
+    public string Token { get; private set; } //not mapped
+    public byte[] TokenHash { get; private set; }
+    public DateTime ExpiredAt { get; private set; }
+
+    //for ef core
+    private RefreshToken() { }
+
+    public RefreshToken(TimeSpan timeSpan)
+    {
+        Token = Guid.NewGuid().ToString();
+        var bytes = Encoding.UTF8.GetBytes(Token);
+        TokenHash = SHA256.HashData(bytes);
+        
+        ExpiredAt = DateTime.UtcNow.Add(timeSpan);
+    }
+
+    public bool IsValid(string token)
+    {
+        ArgumentNullException.ThrowIfNull(token, nameof(token));
+
+        var bytes = Encoding.UTF8.GetBytes(token);
+        var hash = SHA256.HashData(bytes);
+        return hash.SequenceEqual(TokenHash) && ExpiredAt > DateTime.UtcNow;
+    }
+}
+
+public class User : IdentityUser
+{
+    ...
+
+    public void Login(TimeSpan refreshTokenValidtyPeriod)
+    {
+        _refreshTokens.Clear();
+        _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
+    }
+
+    public void LoginByRefreshToken(string token, TimeSpan refreshTokenValidtyPeriod)
+    {
+        if (!_refreshTokens.Any(x => x.IsValid(token)))
+            throw new InvalidOrExpiredRefreshTokenException();
+
+        _refreshTokens.Clear();
+        _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
+    }
+   ...
+}
+```
+
 # API Dokümantasyonu
 
 ### Users
