@@ -392,6 +392,54 @@ public class UserNameUpdaterDomainService(IUserRepository userRepository)
 | **LoginByRefreshToken**    | Refresh token kullanarak yeni access token üretir. |
 | **UpdateUserName**         | Kullanıcının kullanıcı adını günceller. |
 
+## Access Token Üretimi
+
+Access Token, bir kullanıcının veya servisin bir kaynağa erişim yetkisini temsil eden kısa ömürlü bir kimlik doğrulama bilgisidir. Modern web ve microservice mimarilerinde, özellikle JWT (JSON Web Token) formatında kullanılır. Access Token, sadece kimliği doğrulamakla kalmaz, aynı zamanda kullanıcının rol ve izin bilgilerini (claim) de taşır.
+
+Token üretimi sırasında iki temel yaklaşım vardır: simetrik anahtar ve asimetrik anahtar kullanımı.
+
+| Özellik | Simetrik Key (HMAC) | Asimetrik Key (Public/Private Key) |
+|---------|-------------------|-----------------------------------|
+| Anahtar sayısı | Tek anahtar (secret key) | İki anahtar: Private ve Public |
+| Kullanım | Hem token imzalama hem doğrulama | Private key ile imzalama, Public key ile doğrulama |
+| Güvenlik | Anahtar paylaşımı gerekir; kaybolursa tüm sistem etkilenir | Public key paylaşılabilir; private key gizli tutulur, daha güvenli dağıtım |
+| Performans | Hızlı, hesaplama maliyeti düşük | Daha yavaş, hesaplama maliyeti yüksek |
+| Örnek Algoritmalar | HMACSHA256, HMACSHA512 | RS256, ES256 |
+
+
+Bu uygulamada HMAC-SHA256 algoritması ile imzalanmış simetrik anahtar (secret key) kullanılarak Access Token üretilmektedir. Token içindeki claim’ler, kullanıcının kimliği ve rollerine dair bilgileri içerir; böylece token doğrulandığında kullanıcının sisteme gerçekten ulaşıp ulaşmadığı ve hangi yetkilere sahip olduğu güvenli bir şekilde tespit edilebilir.
+
+
+```csharp
+internal class AccessTokenGenerator(ITokenOptions tokenOptions, UserManager<User> userManager) : IAccessTokenGenerator
+{
+    private async Task<List<Claim>> GetClaims(User user)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+
+        return [
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            ..tokenOptions.Audience.Select(aud => new Claim(JwtRegisteredClaimNames.Aud, aud)),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            .. roles.Select(role => new Claim(ClaimTypes.Role, role))
+        ];
+    }
+
+    public async Task<string> GenerateAsync(User user)
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey));
+        JwtSecurityToken jwtSecurityToken = new(
+            issuer: tokenOptions.Issuer,
+            expires: DateTime.Now.AddMinutes(tokenOptions.AccessTokenValidtyPeriod),
+            notBefore: DateTime.Now,
+            claims: await GetClaims(user),
+            signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
+        );
+        return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+    }
+}
+```
+
 # API Dokümantasyonu
 
 ### Users
