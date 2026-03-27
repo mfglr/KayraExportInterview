@@ -7,7 +7,7 @@ services:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=123456789Abc*
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
       - MSSQL_PID=Evaluation
     networks:
       - app-network
@@ -60,18 +60,20 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
-      - ConnectionStrings:SqlServer=Server=mssql,1433;Database=AuthDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
-      - RabbitMQOptions:Host=rabbitmq
-      - RabbitMQOptions:VirtualHost=/
-      - RabbitMQOptions:Password=guest
-      - RabbitMQOptions:UserName=guest
-      - RabbitMQOptions:LogExchangeName=LogExchange
-      - AuthOptions:Issuer=http://authservice.api
-      - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
-      - TokenOptions:Issuer=http://authservice.api
-      - TokenOptions:AccessTokenValidtyPeriod=15
-      - TokenOptions:RefreshTokenValidtyPeriod=30
-      - TokenOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key 
+      
+      - ConnectionStrings:SqlServer=${AUTH_SERVICE_DB_STRING}
+      
+      - RabbitMQOptions:Host=${RABBITMQ_HOST}
+      - RabbitMQOptions:VirtualHost=${RABBITMQ_VIRTUAL_HOST}
+      - RabbitMQOptions:Password=${RABBITMQ_PASSWORD}
+      - RabbitMQOptions:UserName=${RABBITMQ_USERNAME}
+
+      - AuthOptions:Issuer=${AUTH_SERVICE}
+      - AuthOptions:SecurityKey=${ACCESS_TOKEN_SECURITY_KEY}
+      - TokenOptions:Issuer=${AUTH_SERVICE}
+      - TokenOptions:AccessTokenValidtyPeriod=${ACCESS_TOKEN_VALIDITY_PERIOD}
+      - TokenOptions:RefreshTokenValidtyPeriod=${REFRESH_TOKEN_VALIDITY_PERIOD}
+      - TokenOptions:SecurityKey=${ACCESS_TOKEN_SECURITY_KEY}
     ports:
       - "80"
     depends_on:
@@ -89,15 +91,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
-      - ConnectionStrings:SqlServer=Server=mssql,1433;Database=ProductDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
-      - RabbitMQOptions:Host=rabbitmq
-      - RabbitMQOptions:VirtualHost=/
-      - RabbitMQOptions:Password=guest
-      - RabbitMQOptions:UserName=guest
-      - RabbitMQOptions:LogExchangeName=LogExchange
-      - AuthOptions:Issuer=http://authservice.api
-      - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
-      - Redis:Host=redis:6379
+
+      - ConnectionStrings:SqlServer=${PRODUCT_SERVICE_DB_STRING}
+
+      - RabbitMQOptions:Host=${RABBITMQ_HOST}
+      - RabbitMQOptions:VirtualHost=${RABBITMQ_VIRTUAL_Host}
+      - RabbitMQOptions:Password=${RABBITMQ_PASSWORD}
+      - RabbitMQOptions:UserName=${RABBITMQ_USERNAME}
+
+      - AuthOptions:Issuer=${AUTH_SERVICE}
+      - AuthOptions:SecurityKey=${ACCESS_TOKEN_SECURITY_KEY}
+      - Redis:Host=${REDIS}
     ports:
       - "80"
     depends_on:
@@ -116,7 +120,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
-      - ElasticSearchOptions:Host=http://elasticsearch:9200/
+      - ElasticSearchOptions:Host=${ELASTIC_SEARCH}
     ports:
       - "80"
     depends_on:
@@ -132,12 +136,12 @@ services:
     restart: always
     environment:
       - DOTNET_ENVIRONMENT=Development
-      - ElasticSearchOptions:Host=http://elasticsearch:9200/
-      - RabbitMQOptions:Host=rabbitmq
-      - RabbitMQOptions:VirtualHost=/
-      - RabbitMQOptions:Password=guest
-      - RabbitMQOptions:UserName=guest
-      - RabbitMQOptions:LogExchangeName=LogExchange
+      - ElasticSearchOptions:Host=${ELASTIC_SEARCH}
+
+      - RabbitMQOptions:Host=${RABBITMQ_HOST}
+      - RabbitMQOptions:VirtualHost=${RABBITMQ_VIRTUAL_Host}
+      - RabbitMQOptions:Password=${RABBITMQ_PASSWORD}
+      - RabbitMQOptions:UserName=${RABBITMQ_USERNAME}
     depends_on:
       - rabbitmq
       - elasticsearch
@@ -153,17 +157,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
-      - RabbitMQOptions:Host=rabbitmq
-      - RabbitMQOptions:VirtualHost=/
-      - RabbitMQOptions:Password=guest
-      - RabbitMQOptions:UserName=guest
-      - RabbitMQOptions:LogExchangeName=LogExchange
-      - AuthOptions:Issuer=http://authservice.api
-      - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
 
-      - ReverseProxy:Clusters:user.cluster:Destinations:destination:Address=http://authservice.api
-      - ReverseProxy:Clusters:product.cluster:Destinations:destination:Address=http://productservice.api
-      - ReverseProxy:Clusters:log.cluster:Destinations:destination:Address=http://logservice.api
+      - RabbitMQOptions:Host=${RABBITMQ_HOST}
+      - RabbitMQOptions:VirtualHost=${RABBITMQ_VIRTUAL_HOST}
+      - RabbitMQOptions:Password=${RABBITMQ_PASSWORD}
+      - RabbitMQOptions:UserName=${RABBITMQ_USERNAME}
+
+      - AuthOptions:Issuer=${AUTH_SERVICE}
+      - AuthOptions:SecurityKey=${ACCESS_TOKEN_SECURITY_KEY}
+
+      - ReverseProxy:Clusters:user.cluster:Destinations:destination:Address=${AUTH_SERVICE}
+      - ReverseProxy:Clusters:product.cluster:Destinations:destination:Address=${PRODUCT_SERVICE}
+      - ReverseProxy:Clusters:log.cluster:Destinations:destination:Address=${LOG_SERVICE}
     ports:
       - "5001:80"
     depends_on:
