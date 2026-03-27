@@ -36,5 +36,12 @@ namespace AuthService.Domain.Entities
             _refreshTokens.Clear();
             _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
         }
+
+        internal void UpdateUserName(UserName userName)
+        {
+            UserName = userName.Value;
+            NormalizedUserName = userName.Value.ToUpper();
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

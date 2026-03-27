@@ -23,6 +23,9 @@ namespace AuthService.Infrastructure.EfCore
         public async Task<bool> ExistAsync(Email email, CancellationToken cancellation = default) =>
             await userManager.FindByEmailAsync(email.Value) != null;
 
+        public async Task<bool> ExistAsync(UserName userName, CancellationToken cancellationToken = default) =>
+            await userManager.FindByNameAsync(userName.Value) != null;
+
         public Task<bool> CheckPasswordAsync(User user, string password, CancellationToken cancellationToken = default) =>
             userManager.CheckPasswordAsync(user, password);
 

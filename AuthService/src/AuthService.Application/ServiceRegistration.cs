@@ -1,5 +1,6 @@
 ﻿using AuthService.Application.Commands.CreateUser;
 using AuthService.Application.Commands.DeleteUser;
+using AuthService.Application.Commands.UpdateUserName;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ namespace AuthService.Application
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration) =>
             services
                 .AddSingleton<CreateUserCommandMapper>()
+                .AddSingleton<UpdateUserNameCommandMapper>()
                 .AddSingleton<DeleteUserCommandMapper>()
                 .AddMediatR(
                     cfg =>

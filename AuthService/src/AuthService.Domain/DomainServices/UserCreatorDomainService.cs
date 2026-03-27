@@ -9,7 +9,7 @@ namespace AuthService.Domain.DomainServices
     {
         public async Task<User> CreateAsync(Email email, TimeSpan refreshTokenValidtyPeriod, CancellationToken cancellationToken = default)
         {
-            if (await userRepository.ExistAsync(email))
+            if (await userRepository.ExistAsync(email, cancellationToken))
                 throw new EmailAlreadyTakenException();
 
             return new(email, refreshTokenValidtyPeriod);
