@@ -7,7 +7,7 @@ namespace LogService.Infractructure.ElasticSearch
     internal class LogRepository(ElasticsearchClient client) : ILogRepository
     {
         public Task CreateAsync(Log log, CancellationToken cancellationToken = default) =>
-            client.IndexAsync(log, log.Id, x => x.Index(IndexNameProvider.IndexName), cancellationToken: cancellationToken);
+            client.IndexAsync(log, x => x.Index(IndexNameProvider.IndexName), cancellationToken: cancellationToken);
 
 
         public Task CreateAsync(IEnumerable<Log> logs, CancellationToken cancellationToken = default) =>
@@ -20,7 +20,7 @@ namespace LogService.Infractructure.ElasticSearch
                     search
                         .Indices(IndexNameProvider.IndexName)
                         .Query(q => q.Term(t => t.Field(x => x.Level).Value(level)))
-                        .Sort(x => x.Field(x => x.Id,SortOrder.Desc))
+                        .Sort(x => x.Field(x => x.Timestamp,SortOrder.Desc))
                         .From(page * pageSize)
                         .Size(pageSize),
                 cancellationToken: cancellationToken
@@ -35,7 +35,7 @@ namespace LogService.Infractructure.ElasticSearch
                     search
                         .Indices(IndexNameProvider.IndexName)
                         .Query(q => q.Term(t => t.Field(x => x.TraceId).Value(traceId)))
-                        .Sort(x => x.Field(x => x.Id, SortOrder.Desc))
+                        .Sort(x => x.Field(x => x.Timestamp, SortOrder.Desc))
                         .From(page * pageSize)
                         .Size(pageSize),
                 cancellationToken: cancellationToken

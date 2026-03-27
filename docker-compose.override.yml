@@ -27,6 +27,7 @@ services:
   
   kibana:
     container_name: kibana
+    restart: always
     ports:
       - "5601:5601"
     depends_on:
@@ -58,7 +59,7 @@ services:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTP_PORTS=80
       - ConnectionStrings:SqlServer=Server=mssql,1433;Database=AuthDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
       - RabbitMQOptions:Host=rabbitmq
       - RabbitMQOptions:VirtualHost=/
@@ -72,9 +73,10 @@ services:
       - TokenOptions:RefreshTokenValidtyPeriod=30
       - TokenOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key 
     ports:
-      - "5001:8080"
+      - "80"
     depends_on:
       - mssql
+      - rabbitmq
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
@@ -86,7 +88,7 @@ services:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTP_PORTS=80
       - ConnectionStrings:SqlServer=Server=mssql,1433;Database=ProductDB;User Id=sa;Password=123456789Abc*;TrustServerCertificate=True;
       - RabbitMQOptions:Host=rabbitmq
       - RabbitMQOptions:VirtualHost=/
@@ -97,9 +99,11 @@ services:
       - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
       - Redis:Host=redis:6379
     ports:
-      - "5002:8080"
+      - "80"
     depends_on:
       - mssql
+      - rabbitmq
+      - redis
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
@@ -107,12 +111,14 @@ services:
       - app-network
 
   logservice.api:
+    container_name: logserviceapi
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTP_PORTS=80
       - ElasticSearchOptions:Host=http://elasticsearch:9200/
     ports:
-      - "5003:8080"
+      - "80"
     depends_on:
       - elasticsearch
     volumes:
@@ -122,6 +128,8 @@ services:
       - app-network
 
   logservice.worker:
+    container_name: logserviceworker
+    restart: always
     environment:
       - DOTNET_ENVIRONMENT=Development
       - ElasticSearchOptions:Host=http://elasticsearch:9200/
@@ -132,13 +140,40 @@ services:
       - RabbitMQOptions:LogExchangeName=LogExchange
     depends_on:
       - rabbitmq
+      - elasticsearch
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
     networks:
       - app-network
 
+  gateway.api:
+    container_name: gatewayapi
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - RabbitMQOptions:Host=rabbitmq
+      - RabbitMQOptions:VirtualHost=/
+      - RabbitMQOptions:Password=guest
+      - RabbitMQOptions:UserName=guest
+      - RabbitMQOptions:LogExchangeName=LogExchange
+      - AuthOptions:Issuer=http://authservice.api
+      - AuthOptions:SecurityKey=top_secret_security_key_top_secret_security_key_top_secret_security_key_top_secret_security_key
+
+      - ReverseProxy:Clusters:user.cluster:Destinations:destination:Address=http://authservice.api
+      - ReverseProxy:Clusters:product.cluster:Destinations:destination:Address=http://productservice.api
+      - ReverseProxy:Clusters:log.cluster:Destinations:destination:Address=http://logservice.api
+    ports:
+      - "5001:80"
+    depends_on:
+      - rabbitmq
+      - authservice.api
+      - productservice.api
+      - logservice.api
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
-

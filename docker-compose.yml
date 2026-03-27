@@ -34,10 +34,17 @@ services:
       context: .
       dockerfile: LogService/LogService.Worker/Dockerfile
 
+  gateway.api:
+    image: ${DOCKER_REGISTRY-}gatewayapi
+    build:
+      context: .
+      dockerfile: Gateway.Api/Dockerfile
+
 volumes:
   elastic_search_volume:
   rabbitmq_volume:
   
+
 
 
 

@@ -5,7 +5,15 @@ namespace LogService.Infractructure.ElasticSearch
 {
     public static class MappingConfigurator
     {
-        public static async Task Configure(ElasticsearchClient client) {
+        public static async Task ConfigureAsync(ElasticsearchClient client) {
+
+            var response = await client.PingAsync();
+            while (!response.IsSuccess())
+            {
+                await Task.Delay(1000);
+                response = await client.PingAsync();
+            };
+
             await client.Indices
                 .CreateAsync<Log>(
                     index => index
@@ -13,9 +21,8 @@ namespace LogService.Infractructure.ElasticSearch
                         .Mappings(mappings => mappings
                             .Properties(
                                 properties => properties
-                                    .Keyword(x => x.Id)
                                     .Keyword(x => x.ServiceName)
-                                    .Date(x => x.Timestamp,x => x.Index(false))
+                                    .Date(x => x.Timestamp)
                                     .Keyword(x => x.Level)
                                     .Text(x => x.MessageTemplate)
                                     .Keyword(x => x.TraceId)
