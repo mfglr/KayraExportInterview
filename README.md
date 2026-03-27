@@ -731,7 +731,7 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
 </table>
 
 
-#### Update Delete
+#### Delete Product
 ##### HTTP Mehtod: DELETE
 ##### URL: /products/delete/{product-id}
 
@@ -786,3 +786,109 @@ Bu endpoint’e erişebilmek için user rolüne sahip bir access token gereklidi
     </tr>
   </tbody>
 </table>
+
+#### Get Product By Id
+##### HTTP Mehtod: GET
+##### URL: /products/query/getById/{product-id}
+
+<table>
+  <thead>
+    <tr>
+      <th>Parametre Adı</th>
+      <th>Tipi</th>
+      <th>Zorunlu</th>
+      <th>Açıklama</th>
+      <th>Örnek Değer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>product-id</td>
+      <td>UUID / string</td>
+      <td>Evet</td>
+      <td>Okunan ürünün benzersiz kimliği (ID)</td>
+      <td>79b36246-3c43-40c1-8695-13425c171850</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body
+
+<h4>Örnek Response</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Alan</th>
+      <th>Tipi</th>
+      <th>Açıklama</th>
+      <th>Örnek Değer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>UUID / string</td>
+      <td>Ürünün benzersiz kimliği</td>
+      <td>019d2fab-a860-774c-a3c0-9ff1bc7de95b</td>
+    </tr>
+    <tr>
+      <td>createdAt</td>
+      <td>string (ISO 8601)</td>
+      <td>Ürünün oluşturulma tarihi</td>
+      <td>2026-03-27T14:21:12.1607198Z</td>
+    </tr>
+    <tr>
+      <td>updatedAt</td>
+      <td>string / null</td>
+      <td>Ürünün güncellenme tarihi (null ise güncellenmemiş)</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>categoryId</td>
+      <td>UUID / string</td>
+      <td>Ürünün ait olduğu kategori ID’si</td>
+      <td>79b36246-3c43-40c1-8695-13425c171850</td>
+    </tr>
+    <tr>
+      <td>title</td>
+      <td>string</td>
+      <td>Ürünün başlığı</td>
+      <td>test</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>string</td>
+      <td>Ürünün açıklaması</td>
+      <td>test test test</td>
+    </tr>
+    <tr>
+      <td>price.price</td>
+      <td>decimal</td>
+      <td>Ürünün fiyatı</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>price.currency</td>
+      <td>string</td>
+      <td>Fiyatın para birimi</td>
+      <td>TRY</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Request Body Örneği
+
+<code>
+ {
+    "id": "019d2fab-a860-774c-a3c0-9ff1bc7de95b",
+    "createdAt": "2026-03-27T14:21:12.1607198Z",
+    "updatedAt": null,
+    "categoryId": "79b36246-3c43-40c1-8695-13425c171850",
+    "title": "test",
+    "description": "test test test",
+    "price": {
+        "price": 0.01,
+        "currency": "TRY"
+    }
+}
+</code>
