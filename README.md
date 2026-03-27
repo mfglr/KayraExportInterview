@@ -73,7 +73,7 @@
   <b>Unit of Work Pattern:</b> Birden fazla veri erişim işlemini tek bir transaction altında toplamak için kullanıldı; tüm işlemler atomik olarak yönetildi, commit/rollback mekanizmaları ile veri tutarlılığı (consistency) sağlandı.
 </p>
 <p>
-  <b>Outbox Pattern:</b> Veri tabanı işlemleri ile mesaj yayınlama (2 Phase Commit (2PC)) süreçlerinin tutarlı bir şekilde yürütülmesi için kullanıldı; event’ler önce veritabanındaki outbox tablosuna yazıldı, ardından güvenilir şekilde message broker’a iletilerek eventual consistency sağlandı.
+  <b>Outbox Pattern:</b> Veri tabanı işlemleri ile mesaj yayınlama süreçlerinin tutarlı bir şekilde yürütülmesi için kullanıldı; event’ler önce veritabanındaki outbox tablosuna yazıldı, ardından güvenilir şekilde message broker’a iletilerek eventual consistency sağlandı.
 </p>
 <p>
   <b>Options Pattern:</b> Konfigürasyon ayarlarını strongly-typed sınıflar üzerinden yönetmek için kullanıldı.
@@ -111,26 +111,6 @@ git checkout -b prod/v1.0.0 origin/prod/v1.0.0
 ```cmd
 docker-compose up --build -d
 ```
-
-## Neden MediatR?
-
-MediatR, Mediator Patterni uygulayan ve C# ekosisteminde yaygın kullanılan bir kütüphanedir. Nesneler arasındaki direct bağımlılıkları azaltır, işlemleri Command/Query/Notification olarak merkezi bir handler üzerinden yönetmeyi sağlar. Böylece kod daha modüler, test edilebilir ve okunabilir hâle gelir. Ayrıca pipeline desteği sayesinde logging, validation, transaction ve caching gibi ortak süreçler tek bir noktadan yönetilebilir.
-
-## Outbox Pattern
-### Outbox Pattern Nedir?
-<p>
- Bir servis, kendi veritabanına veri yazarken aynı transaction içinde "outbox" tablosuna event kaydeder. Bu event, sistemler arası iletişim için kullanılacak asenkron mesajların kaynağı olur. Daha sonra bir worker/consumer, outbox tablosunu okuyarak mesajları diğer servis veya message broker’a (RabbitMQ, Kafka vb.) gönderir.
-</p>
-
-### Neden Outbox Pattern?
-<p>
- Outbox Pattern kullanılmazsa, bir servis siparişi kaydederken diğer servislere event’leri gönderilemeyebilir ve veri tutarsızlığı oluşabilir; Outbox Pattern ile sipariş kaydı ve event publish aynı transaction içinde güvenli şekilde yönetilir.
-</p>
-
-<p>
- Outbox patternini MassTransit kütüphanesi aracılığıyla uyguluyorum.
-</p>
-
 
 # PRODUCT SERVICE
 
