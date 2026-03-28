@@ -185,6 +185,7 @@ Bu problemi çözmek için Outbox Pattern uygulanmıştır. Event doğrudan mess
 | Command | Create Product         | Yeni ürün oluşturur              |
 | Command | Update Product         | Mevcut ürünü günceller           |
 | Command | Delete Product         | Ürünü siler                      |
+| Command | DeleteUserProducts     | Kullanıcının ürünlerini siler    |
 | Query   | Get Product By Id      | ID’ye göre ürün getirir          |
 | Query   | Get All Products       | Tüm ürünleri listeler            |
 | Query   | Search Products        | Ürünler üzerinde arama yapar     |
@@ -351,6 +352,12 @@ Bu projede ürün listeleme [Get All Products](#get-all-products) endpoint’i i
 <p>
  Eski cache verileri Redis’te kalmaya devam eder (memory trade-off). TTL eklenerek bu problem minimize edilebilir ya da clean-up worker yazılabilir.
 </p>
+
+## UserDeletedEvent Consumer
+
+Kullanıcı silindiğinde UserDeletedEvent yayınlanır ve bu event’i dinleyen Product Microservice, otomatik olarak DeleteUserProduct use case’ini tetikler. Bu sayede kullanıcıya ait ürünler, event tabanlı bir akış ile tutarlı ve senkronize şekilde silinir.
+
+<img width="791" height="623" alt="Screenshot 2026-03-28 045757" src="https://github.com/user-attachments/assets/cfc53eeb-53a0-4228-9b48-a7edb33c4440" />
 
 
 # AUTH SERVICE
