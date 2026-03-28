@@ -37,6 +37,9 @@
 <p>
   <b>Mesajlaşma Sistemi:</b> RabbitMQ
 </p>
+<p>
+ <b>Container & Orkestrasyon:</b> Docker, Docker Compose
+</p>
 
 ## Kullanılan Kütüphaneler
 <p>
