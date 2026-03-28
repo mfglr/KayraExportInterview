@@ -32,7 +32,7 @@ namespace AuthService.Application.Commands.CreateUser
                 await accessTokenGenerator.GenerateAsync(user),
                 user.RefreshTokens[0].Token
             );
-            return new(Guid.Parse(user.Id), token);
+            return new(Guid.Parse(user.Id), user.UserName!, token);
         }
     }
 }
