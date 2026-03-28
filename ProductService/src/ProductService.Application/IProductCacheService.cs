@@ -4,6 +4,7 @@ namespace ProductService.Application
 {
     public interface IProductCacheService
     {
+        Task UpdateProductListVersion();
         Task<ProductQueryResponse?> GetAsync(Guid id);
         Task UpsertAsync(ProductQueryResponse product);
         Task DeleteAsync(Guid id);

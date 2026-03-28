@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using MediatR;
-using ProductService.Application.Queries;
 using ProductService.Domain.Entities;
 using ProductService.Domain.Repositories;
 using ProductService.Domain.ValueObjects;
@@ -11,7 +10,6 @@ namespace ProductService.Application.Commands.CreateProduct
         IProductRepository repository,
         IPublishEndpoint publishEndpoint,
         CreateProductCommandMapper mapper,
-        ProductQueryResponseMapper queryMapper,
         IProductCacheService cacheService,
         IAuthService authService
     ) : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
@@ -30,7 +28,7 @@ namespace ProductService.Application.Commands.CreateProduct
             var @event = mapper.Map(product);
             await publishEndpoint.Publish(@event, cancellationToken);
 
-            await cacheService.UpsertAsync(queryMapper.Map(product));
+            await cacheService.UpdateProductListVersion();
 
             return new(product.Id);
         }

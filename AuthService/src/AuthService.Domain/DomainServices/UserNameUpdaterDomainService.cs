@@ -1,4 +1,5 @@
 ﻿using AuthService.Domain.Entities;
+using AuthService.Domain.Exceptions;
 using AuthService.Domain.Repositories;
 using AuthService.Domain.ValueObjects;
 

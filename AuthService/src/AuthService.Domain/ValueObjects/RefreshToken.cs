@@ -20,19 +20,14 @@ namespace AuthService.Domain.ValueObjects
             
             ExpiredAt = DateTime.UtcNow.Add(timeSpan);
         }
-            
-        internal bool IsExpired() => ExpiredAt < DateTime.UtcNow;
 
-        internal bool IsMatching(string token)
+        public bool IsValid(string token)
         {
             ArgumentNullException.ThrowIfNull(token, nameof(token));
 
             var bytes = Encoding.UTF8.GetBytes(token);
             var hash = SHA256.HashData(bytes);
-            return hash.SequenceEqual(TokenHash);
+            return hash.SequenceEqual(TokenHash) && ExpiredAt > DateTime.UtcNow;
         }
-
-        public bool IsValid(string token) => IsMatching(token) && !IsExpired();
-
     }
 }

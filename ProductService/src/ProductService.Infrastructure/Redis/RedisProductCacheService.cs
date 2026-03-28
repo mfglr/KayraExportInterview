@@ -8,7 +8,7 @@ namespace ProductService.Infrastructure.Redis
     internal class RedisProductCacheService(IDatabase database) : IProductCacheService
     {
         private readonly static string _productListVersionKey = "product:list:version";
-        private Task UpdateProductListVersion() => database.StringIncrementAsync(_productListVersionKey, 1);
+        public Task UpdateProductListVersion() => database.StringIncrementAsync(_productListVersionKey, 1);
         private async Task<long> GetProductListVersion()
         {
             var result = await database.StringGetAsync(_productListVersionKey);
