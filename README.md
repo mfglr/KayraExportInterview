@@ -506,6 +506,144 @@ public class User : IdentityUser
 }
 ```
 
+# API GATEWAY
+
+API Gateway’de YARP (Yet Another Reverse Proxy) kullanılmıştır. Gateway, tüm servisler için merkezi rate limiting uygular ve authentication/authorization işlemlerini burada gerçekleştirir. Gelen isteklerdeki Access Token doğrulaması da API Gateway üzerinde yapılmaktadır.
+
+## Authentication Konfigrasyonu
+
+JWT tabanlı authentication, API Gateway’de yapılandırılmıştır. AddAuthentication ve AddJwtBearer ile gateway, gelen isteklerde Access Token doğrulaması yapar; Authority ve Audience değerleri token’ın kaynağını ve hedefini belirlerken, TokenValidationParameters ile token’ın imzası, süresi ve geçerliliği kontrol edilir.
+
+```csharp
+services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(
+        JwtBearerDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.Authority = authOptions.Issuer;
+            options.Audience = authOptions.Audience;
+            options.RequireHttpsMetadata = false;
+
+            options.TokenValidationParameters = new()
+            {
+                IssuerSigningKey = securityKey,
+                ValidIssuer = authOptions.Issuer,
+                ValidAudience = authOptions.Audience,
+
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ValidateIssuer = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        }
+    );
+```
+
+## Authorization Konfigrasyonu
+
+API Gateway’de authorization da JWT tabanlı olarak yapılandırılmıştır. AddAuthorization ile “user” adında bir policy tanımlanır; bu policy, yalnızca doğrulanmış (authenticated) kullanıcıların ve "user" rolüne sahip kullanıcıların erişimine izin verir.
+
+```csharp
+services
+    .AddAuthorization(
+        options =>
+        {
+            options
+                .AddPolicy(
+                    "user",
+                    p =>
+                    {
+                        p.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                        p.RequireAuthenticatedUser();
+                        p.RequireRole("user");
+                    }
+                );
+        }
+    );
+```
+
+## Rate Limit Konfigrasyonu
+
+API Gateway’de merkezi rate limiting uygulanmıştır. AddRateLimiter ile her kullanıcı veya IP adresi için sabit pencere (Fixed Window) limiti tanımlanır; limit aşıldığında istekler 429 (Too Many Requests) hatası ile reddedilir. Kullanıcıyı belirlemek için JWT claim’leri veya IP adresi kullanılır ve limitleme değerleri (PermitLimit, Window, QueueLimit) konfigürasyondan okunur. Bu yapı, servisleri aşırı yükten korur ve isteklerin kontrollü şekilde işlenmesini sağlar.
+
+```csharp
+services
+    .AddRateLimiter(options =>
+    {
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(
+            (context) =>
+            {
+                var key =
+                    context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ??
+                    context.Connection.RemoteIpAddress?.ToString() ??
+                    "anonymous";
+
+                return RateLimitPartition.GetFixedWindowLimiter(key, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = int.Parse(configuration["RateLimit:PermitLimit"]!),
+                    Window = TimeSpan.FromSeconds(int.Parse(configuration["RateLimit:Window"]!)),
+                    QueueLimit = int.Parse(configuration["RateLimit:QueueLimit"]!),
+                    AutoReplenishment = true
+                });
+            }
+        );
+
+        options.OnRejected = async (context, token) =>
+        {
+            context.HttpContext.Response.StatusCode = 429;
+            await context.HttpContext.Response.WriteAsJsonAsync(new { Message = "Rate limit exceeded" }, token);
+        };
+
+    });
+```
+
+# LOG SERVICE ve LOG LISTENER WORKER
+
+<b>Log Listener Worker:</b> Uygulamalar tarafından Serilog aracılığıyla RabbitMQ’ya gönderilen log event’lerini dinler ve bu kayıtları Elasticsearch’e kaydeder. Böylece log verileri merkezi ve aramaya hazır hâle gelir.
+<b>Log Service:</b> Elasticsearch’e kaydedilen loglar üzerinde arama ve filtreleme işlemleri yapmak için RESTful endpoint’ler sağlar.
+
+| Domain Nesnesi      | Açıklama |
+|--------------------|----------|
+| **Exception**      | Uygulamada meydana gelen hata veya istisnaları temsil eder. |
+| **ILogRepository** | Log kayıtlarının veri kaynağına (database, dosya, vs.) yazılması ve okunması için kullanılan interface. |
+| **Log**            | Uygulama içi önemli olayları, hata ve bilgi mesajlarını merkezi olarak tutan nesne. |
+
+## Use Cases
+
+| Use Case       | Açıklama |
+|----------------|----------|
+| **CreateLog**  | Tek bir log kaydını oluşturur. |
+| **CreateLogs** | Birden fazla log kaydını toplu olarak oluşturur. |
+| **SearchLogs** | Log kayıtları üzerinde arama yapar ve filtreleme sağlar. |
+
+
+## Elastic Search Konfigrasyon
+
+Log microservice’de Elasticsearch entegrasyonu ServiceRegistration sınıfı ile yapılandırılmıştır. AddElacticSearch extension metodu, konfigürasyondan alınan host bilgisi ile ElasticsearchClient oluşturur ve servis koleksiyonuna singleton olarak ekler. Ayrıca ILogRepository interface’i, log kayıtlarını Elasticsearch’e yazmak ve okumak için LogRepository implementasyonu ile scoped olarak eklenir. Bu sayede log verileri merkezi bir şekilde depolanır ve erişilebilir hâle gelir.
+
+```csharp
+internal static class ServiceRegistration
+{
+    public static IServiceCollection AddElacticSearch(this IServiceCollection services, IConfiguration configuration)
+    {
+        var option = configuration.GetSection(nameof(ElasticSearchOptions))!;
+        var clientSettings = new ElasticsearchClientSettings(new Uri(option["Host"]!));
+
+        return services
+            .AddSingleton(new ElasticsearchClient(clientSettings))
+            .AddScoped<ILogRepository, LogRepository>();
+    }
+        
+}
+```
+
+
+
 # API Dokümantasyonu
 
 ### Users
