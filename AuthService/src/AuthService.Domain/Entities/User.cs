@@ -15,6 +15,7 @@ namespace AuthService.Domain.Entities
         {
             Email = email.Value;
             UserName = email.GenerateUserName();
+            NormalizedUserName = UserName.ToUpper();
             _refreshTokens.Add(new RefreshToken(refreshTokenValidtyPeriod));
             CreatedAt = DateTime.UtcNow;
         }

@@ -1,60 +1,102 @@
-﻿//namespace AuthService.Domain.Test
-//{
-//    public class UserUnitTests
-//    {
-//        [Fact]
-//        public void CreateSession_ShouldAddNewSession_WhenUnderLimit()
-//        {
-//            var user = new User();
+﻿using AuthService.Domain.Entities;
+using AuthService.Domain.Exceptions;
+using AuthService.Domain.ValueObjects;
 
-//            var token = user.CreateSession(TimeSpan.FromMinutes(5));
+namespace AuthService.Domain.Test
+{
+    public class UserTests
+    {
+        private readonly TimeSpan _defaultRefreshTokenValidity = TimeSpan.FromDays(7);
+        private readonly Email _testEmail = new("test@example.com");
 
-//            Assert.Single(user.RefreshTokens);
-//            Assert.Equal(token, user.RefreshTokens[0].Token);
-//        }
+        [Fact]
+        public void Constructor_ShouldCreateUser_WithValidEmailAndInitialRefreshToken()
+        {
+            var user = new User(_testEmail, _defaultRefreshTokenValidity);
 
-//        [Fact]
-//        public void CreateSession_ShouldThrow_WhenSessionLimitExceeded()
-//        {
-//            var user = new User(TimeSpan.FromMinutes(5));
-//            for (int i = 0; i < User.MaxSessionCount; i++)
-//                user.CreateSession(TimeSpan.FromMinutes(5));
+            Assert.NotNull(user);
+            Assert.Equal(_testEmail.Value, user.Email);
+            Assert.False(string.IsNullOrEmpty(user.UserName));
+            Assert.True(user.CreatedAt <= DateTime.UtcNow);
+            Assert.True(user.CreatedAt > DateTime.UtcNow.AddSeconds(-10));
+            Assert.Null(user.UpdatedAt);
 
-//            Assert.Throws<SessionLimitExceeded>(() => user.CreateSession(TimeSpan.FromMinutes(5)));
-//        }
+            Assert.Single(user.RefreshTokens);
+            var refreshToken = user.RefreshTokens.First();
+            Assert.NotNull(refreshToken);
+            Assert.True(refreshToken.IsValid(refreshToken.Token));
+        }
 
-//        [Fact]
-//        public void DeleteSession_ShouldRemoveSession_WhenTokenExists()
-//        {
-//            var user = new User();
-//            var token = user.CreateSession(TimeSpan.FromMinutes(5));
+        [Fact]
+        public void Constructor_ShouldGenerateUserName_FromEmail()
+        {
+            var user = new User(_testEmail, _defaultRefreshTokenValidity);
 
-//            user.DeleteSession(token);
+            Assert.False(string.IsNullOrEmpty(user.UserName));
+            Assert.Contains("test", user.UserName, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(user.UserName.ToUpper(), user.NormalizedUserName);
+        }
 
-//            Assert.Empty(user.RefreshTokens);
-//        }
+        [Fact]
+        public void Login_ShouldClearPreviousTokens_AndAddNewOne()
+        {
+            var user = new User(_testEmail, _defaultRefreshTokenValidity);
+            var oldToken = user.RefreshTokens.First().Token;
 
-//        [Fact]
-//        public void DeleteSession_ShouldThrow_WhenTokenDoesNotExist()
-//        {
-//            var user = new User();
-//            var token = user.CreateSession(TimeSpan.FromMinutes(5));
-//            var fakeToken = Guid.NewGuid().ToString();
+            user.Login(TimeSpan.FromDays(30));
 
-//            Assert.Throws<SessionNotFound>(() => user.DeleteSession(fakeToken));
-//            Assert.Single(user.RefreshTokens);
-//        }
+            Assert.Single(user.RefreshTokens);
+            Assert.NotEqual(oldToken, user.RefreshTokens.First().Token);
+            Assert.True(user.RefreshTokens.First().ExpiredAt > DateTime.UtcNow);
+        }
 
-//        [Fact]
-//        public void DeleteSession_ExpiredSessionsShouldBeRemoved_WhenCreatingNewSession()
-//        {
-//            var user = new User();
-//            user.CreateSession(TimeSpan.Zero);
+        [Fact]
+        public void LoginByRefreshToken_ShouldSucceed_WhenTokenIsValid()
+        {
+            var user = new User(_testEmail, _defaultRefreshTokenValidity);
+            var validToken = user.RefreshTokens.First().Token;
 
-//            var token = user.CreateSession(TimeSpan.FromMinutes(5));
+            user.LoginByRefreshToken(validToken, TimeSpan.FromDays(14));
 
-//            Assert.Single(user.RefreshTokens);
-//            Assert.Equal(token, user.RefreshTokens[0].Token);
-//        }
-//    }
-//}
+            Assert.Single(user.RefreshTokens);
+            Assert.NotEqual(validToken, user.RefreshTokens.First().Token);
+        }
+
+        [Fact]
+        public void LoginByRefreshToken_ShouldThrowException_WhenTokenIsInvalid()
+        {
+            var user = new User(_testEmail, _defaultRefreshTokenValidity);
+
+            Assert.Throws<InvalidOrExpiredRefreshTokenException>(() =>
+                user.LoginByRefreshToken("invalid-token-12345", TimeSpan.FromDays(7)));
+        }
+
+        [Fact]
+        public void LoginByRefreshToken_ShouldThrowException_WhenTokenIsExpired()
+        {
+            var shortValidity = TimeSpan.Zero;
+            var user = new User(_testEmail, shortValidity);
+            var token = user.RefreshTokens.First().Token;
+
+            Assert.Throws<InvalidOrExpiredRefreshTokenException>(() =>
+                user.LoginByRefreshToken(token, TimeSpan.FromDays(7)));
+        }
+
+        [Fact]
+        public void UpdateUserName_Should_UpdateUserName_And_NormalizedUserName_And_UpdatedAt()
+        {
+            var user = new User(_testEmail, _defaultRefreshTokenValidity);
+            var newUserName = new UserName("newusername123");
+            var dateBefore = DateTime.UtcNow;
+
+            user.UpdateUserName(newUserName);
+
+            Assert.Equal("newusername123", user.UserName);
+            Assert.Equal("NEWUSERNAME123", user.NormalizedUserName);
+            Assert.NotNull(user.UpdatedAt);
+            Assert.True(user.UpdatedAt > dateBefore);
+            Assert.True(user.UpdatedAt <= DateTime.UtcNow);
+            Assert.True(user.UpdatedAt > DateTime.UtcNow.AddSeconds(-5));
+        }
+    }
+}
